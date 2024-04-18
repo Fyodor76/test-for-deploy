@@ -12,13 +12,9 @@ import './index.scss';
 function App() {
     return (
         <div className="app-container">
-            <BoardProvider>
-                <TodoProvider>
                     <Header/>
                     <Router/>
                     <Footer/>
-                </TodoProvider>
-            </BoardProvider>
             <ToastContainer {...toastConfig} />
         </div>
     );
