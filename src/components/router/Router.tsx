@@ -9,11 +9,11 @@ interface RouteType {
 
 const routes: RouteType[] = [
   {
-    path: '/',
+    path: '/test-for-deploy/',
     element: <div>Main page</div>,
   },
   {
-    path: '/login',
+    path: '/test-for-deploy/login',
     element: <Auth/>,
   },
 ];
