@@ -13,7 +13,7 @@ const routes: RouteType[] = [
     element: <div>Main page</div>,
   },
   {
-    path: '/test-for-deploy/login',
+    path: '/test-for-deploy/login/',
     element: <Auth/>,
   },
 ];
