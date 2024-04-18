@@ -1,9 +1,8 @@
 import React, {
-  createContext, useReducer, useEffect, 
+  createContext, useReducer, useEffect,
 } from 'react';
 
 import { TodoType } from '../types/TodoType';
-import { TodosApi } from '../api/Todos';
 
 type State = {
   todos: TodoType[];
@@ -55,11 +54,11 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    const getTodos = async () => {
-      const response = await TodosApi.getTodos();
-      dispatch(setTodos(response.data));
-    };
-    getTodos();
+    // const getTodos = async () => {
+    //   const response = await TodosApi.getTodos();
+    //   dispatch(setTodos(response.data));
+    // };
+    // getTodos();
   }, []);
 
   return (

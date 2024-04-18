@@ -1,9 +1,8 @@
 import React, {
-  createContext, useReducer, useEffect, 
+  createContext, useReducer, useEffect,
 } from 'react';
 
 import { BoardType } from '../types/BoardType';
-import { BoardsApi } from '../api/Boards';
 
 type State = {
   boards: BoardType[];
@@ -44,11 +43,11 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    const getBoards = async () => {
-      const response = await BoardsApi.getBoards();
-      dispatch(setBoards(response.data));
-    };
-    getBoards();
+    // const getBoards = async () => {
+    //   const response = await BoardsApi.getBoards();
+    //   dispatch(setBoards(response.data));
+    // };
+    // getBoards();
   }, []);
 
   return (
