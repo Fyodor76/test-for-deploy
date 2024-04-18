@@ -34,7 +34,7 @@ export const Header = () =>  {
           <Input placeholder="Найти на Wildberries" />
         </div>
         <div className="header__icon__container">
-          <a className="header__icon" href="./login">
+          <a className="header__icon" href="./test-for-deploy/login">
             <PersonIcon/>
             <div className="header__icon__text">
                       Войти
