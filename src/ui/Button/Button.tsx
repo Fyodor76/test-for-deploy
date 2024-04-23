@@ -2,17 +2,17 @@ import { FC, ReactNode } from 'react';
 
 interface Button {
   size: 'medium' | 'small' | 'large' | 'miniature';
-  backgroung: 'primary' | 'secondary' | 'tertiary' | 'transparent';
+  background: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'base';
   color: 'accent' | 'basic' | 'bark';
   children?: string | ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
 }
 
 export const Button: FC<Button> = ({
   size,
   children,
-  backgroung,
+  background,
   color,
   onClick,
   disabled,
@@ -20,7 +20,7 @@ export const Button: FC<Button> = ({
   return (
     <button
       onClick={onClick}
-      className={`btn btn-${size} btn-${color} btn-${backgroung}`}
+      className={`btn btn-${size} btn-${color} btn-${background}`}
       disabled={disabled}
     >
       {children}

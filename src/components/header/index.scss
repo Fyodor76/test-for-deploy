@@ -75,6 +75,35 @@
   &__logo {
     cursor: pointer;
   }
+
+  .header__icon.login:hover .header__modal__login {
+    display: flex;
+  }
+
+  &__container__login {
+    position: relative;
+  }
+
+  &__modal__login {
+    width: 300px;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    background: white;
+    position: absolute;
+    top: 25px;
+    right: 1%;
+    display: none;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 10px solid #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,.1);
+    border-radius: 20px;
+
+      & button {
+        color: black;
+    }
+  }
 }
 
 @media (max-width: 768px) {

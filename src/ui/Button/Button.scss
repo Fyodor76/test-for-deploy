@@ -1,5 +1,6 @@
 .btn {
-  border-radius: 4px;
+  border-radius: 8px;
+  padding: 10px;
 
   &-miniature {
     width: 35px;
@@ -7,18 +8,19 @@
   }
 
   &-small {
-    width: 50px;
+    min-width: 50px;
     height: 35px;
   }
 
   &-medium {
-    width: 75px;
+    min-width: 75px;
     height: 35px;
   }
 
   &-large {
-    width: 130px;
-    height: 35px;
+    min-width: 250px;
+    height: 50px;
+    font-size: 18px;
   }
 
   &-primary {
@@ -31,6 +33,10 @@
 
   &-tertiary {
     background: #6060d0;
+  }
+
+  &-base {
+    background: rgba(167, 58, 253, 0.9);
   }
 
   &-accent {

@@ -9,6 +9,7 @@ import { Sidebar } from '../sidebar/Sidebar.tsx';
 import { Input } from '../../ui/Input/Input.tsx';
 import './index.scss';
 import {Link} from "react-router-dom";
+import {Button} from "../../ui/Button/Button.tsx";
 
 
 export const Header = () =>  {
@@ -35,10 +36,19 @@ export const Header = () =>  {
           <Input placeholder="Найти на Wildberries" />
         </div>
         <div className="header__icon__container">
-          <Link className="header__icon" to="./test-for-deploy/login">
+          <Link className="header__icon login" to="./test-for-deploy/login">
             <PersonIcon/>
-            <div className="header__icon__text">
-                      Войти
+            <div className="header__container__login">
+              <div className="header__icon__text">
+                <span>Войти</span>
+              </div>
+              <div className="header__modal__login">
+                  <Button size='large' color='basic' background='base'>
+                    <Link className="header__icon login" to="./test-for-deploy/login">
+                      Войти или создать профиль
+                    </Link>
+                  </Button>
+              </div>
             </div>
           </Link>
           <div className="header__icon">
