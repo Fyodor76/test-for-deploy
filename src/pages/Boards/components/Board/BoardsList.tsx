@@ -67,7 +67,7 @@ export const BoardsList = () => {
               <div className="container-btn-del-board">
                 <Button
                   size="large"
-                  backgroung="transparent"
+                  background="transparent"
                   color="accent"
                   onClick={() => handleDeleteBoard(item.id || '')}
                 >

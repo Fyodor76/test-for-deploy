@@ -48,7 +48,7 @@ export const Todo = ({ todo }: TodoProps) => {
           <Button
             size="miniature"
             color="bark"
-            backgroung="transparent"
+            background="transparent"
             onClick={() =>
               openModal(
                 <ModalTemplate
@@ -62,7 +62,7 @@ export const Todo = ({ todo }: TodoProps) => {
           </Button>
           <Button
             size="miniature"
-            backgroung="transparent"
+            background="transparent"
             color="accent"
             onClick={() => handleDeleteTodo(todo?.id || '')}
           >

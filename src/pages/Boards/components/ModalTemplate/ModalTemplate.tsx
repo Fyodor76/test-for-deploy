@@ -54,7 +54,7 @@ export const ModalTemplate = ({ todo, closeModal }: ModalTemplate) => {
           <Button
             size="large"
             color="basic"
-            backgroung="primary"
+            background="primary"
             onClick={() => confirmEdit({ ...todo, title: inputValue })}
           >
             Подтвердить
@@ -62,7 +62,7 @@ export const ModalTemplate = ({ todo, closeModal }: ModalTemplate) => {
           <Button
             size="medium"
             color="basic"
-            backgroung="secondary"
+            background="secondary"
             onClick={() => closeModal()}
           >
             Отмена

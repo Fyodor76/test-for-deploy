@@ -93,7 +93,7 @@ export const AddTodo: React.FC<AddTodo> = ({ boardId }) => {
         <Button
           size="large"
           color="bark"
-          backgroung="transparent"
+          background="transparent"
           onClick={toggleAddTodo}
         >
           <div className="content-add-btn">
@@ -138,7 +138,7 @@ export const AddTodo: React.FC<AddTodo> = ({ boardId }) => {
               {inputValue && (
                 <Button
                   size="medium"
-                  backgroung="secondary"
+                  background="secondary"
                   color="basic"
                   onClick={() => handleInputValue('')}
                 >
@@ -148,7 +148,7 @@ export const AddTodo: React.FC<AddTodo> = ({ boardId }) => {
 
               <Button
                 size="medium"
-                backgroung="secondary"
+                background="secondary"
                 color="basic"
                 onClick={() => hideModal('')}
               >
@@ -158,7 +158,7 @@ export const AddTodo: React.FC<AddTodo> = ({ boardId }) => {
               <Button
                 onClick={createTodo}
                 size="large"
-                backgroung="primary"
+                background="primary"
                 color="basic"
                 disabled={!inputValue}
               >

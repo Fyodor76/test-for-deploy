@@ -37,7 +37,7 @@ export const AddBoard = () => {
         </div>
         <Button
           size="large"
-          backgroung="secondary"
+          background="secondary"
           color="basic"
           disabled={!boardName}
           onClick={() =>
