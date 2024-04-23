@@ -20,7 +20,7 @@ export const Header = () =>  {
         <Transition in={isOpen} timeout={300}>
           <Sidebar isOpen={isOpen}/>
         </Transition>
-        <Link className="header__logo" to="/wb-front">
+        <Link className="header__logo" to="./test-for-deploy">
         <img src={logo}/>
         </Link>
         <div className="header__hamburger">
@@ -35,7 +35,7 @@ export const Header = () =>  {
           <Input placeholder="Найти на Wildberries" />
         </div>
         <div className="header__icon__container">
-          <Link className="header__icon" to="./wb-front/login">
+          <Link className="header__icon" to="./test-for-deploy/login">
             <PersonIcon/>
             <div className="header__icon__text">
                       Войти
