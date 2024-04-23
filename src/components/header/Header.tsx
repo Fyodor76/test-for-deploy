@@ -8,6 +8,7 @@ import logo from '../../assets/logo.svg';
 import { Sidebar } from '../sidebar/Sidebar.tsx';
 import { Input } from '../../ui/Input/Input.tsx';
 import './index.scss';
+import {Link} from "react-router-dom";
 
 
 export const Header = () =>  {
@@ -19,9 +20,9 @@ export const Header = () =>  {
         <Transition in={isOpen} timeout={300}>
           <Sidebar isOpen={isOpen}/>
         </Transition>
-        <a className="header__logo" href="/">
-          <img src={logo}/>
-        </a>
+        <Link className="header__logo" to="/wb-front">
+        <img src={logo}/>
+        </Link>
         <div className="header__hamburger">
           <Hamburger
             toggled={isOpen}
@@ -34,12 +35,12 @@ export const Header = () =>  {
           <Input placeholder="Найти на Wildberries" />
         </div>
         <div className="header__icon__container">
-          <a className="header__icon" href="/login">
+          <Link className="header__icon" to="./wb-front/login">
             <PersonIcon/>
             <div className="header__icon__text">
                       Войти
             </div>
-          </a>
+          </Link>
           <div className="header__icon">
             <ShoppingBasketIcon/>
             <div className="header__icon__text">
