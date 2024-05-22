@@ -21,7 +21,7 @@ export const Header = () =>  {
         <Transition in={isOpen} timeout={300}>
           <Sidebar isOpen={isOpen}/>
         </Transition>
-        <Link className="header__logo" to="./test-for-deploy">
+        <Link className="header__logo" to="./wb-front">
         <img src={logo}/>
         </Link>
         <div className="header__hamburger">
@@ -36,7 +36,7 @@ export const Header = () =>  {
           <Input placeholder="Найти на Wildberries" />
         </div>
         <div className="header__icon__container">
-          <Link className="header__icon login" to="./test-for-deploy/login">
+          <Link className="header__icon login" to="./wb-front/login">
             <PersonIcon/>
             <div className="header__container__login">
               <div className="header__icon__text">
@@ -44,7 +44,7 @@ export const Header = () =>  {
               </div>
               <div className="header__modal__login">
                   <Button size='large' color='basic' background='base'>
-                    <Link className="header__icon login" to="./test-for-deploy/login">
+                    <Link className="header__icon login" to="./wb-front/login">
                       Войти или создать профиль
                     </Link>
                   </Button>
