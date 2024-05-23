@@ -55,8 +55,7 @@
     opacity: 0.3;
   }
 
-
-  &:hover {
+  &:not(:disabled):hover {
     opacity: 0.9;
   }
 }
