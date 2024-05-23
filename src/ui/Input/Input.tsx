@@ -1,24 +1,35 @@
-import { FC, useState } from 'react';
+import { ChangeEvent, MouseEvent, FC } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 interface InputType {
     placeholder: string;
-    icon?: string;
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onClick?: (event: MouseEvent<SVGSVGElement>) => void;
+    value: string;
+    isCloseIcon?: boolean;
+    isSearchIcon?: boolean
 }
-export const Input: FC<InputType> = ({ placeholder }) => {
-  const [value, setValue] = useState<string>('');
+
+export const Input: FC<InputType> = ({
+   placeholder = "", 
+   onChange = Function.prototype,
+   onClick, 
+   value = "", 
+   isCloseIcon = false, 
+   isSearchIcon = false
+  }) => {
   return (
     <div
       className="input-container">
       {value && <div className="input-icons">
-        <CloseIcon className="icon" onClick={() => setValue('')}/>
-        <SearchIcon className="icon"/>
+        { isCloseIcon && <CloseIcon className="icon" onClick={onClick}/>}
+        { isSearchIcon && <SearchIcon className="icon"/>}
       </div>}
       <input
         type="text"
         placeholder={placeholder}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(event) => onChange(event)}
         className="input"
       />
     </div>

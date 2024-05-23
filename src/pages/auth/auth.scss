@@ -1,14 +1,22 @@
 .auth {
-  width: 50%;
+  width: 24%;
   display: flex;
   justify-content: center;
-  height: 50%;
+  min-height: 300px;
   margin: auto auto;
 
   .container {
-    width: 440px;
-    padding: 40px;
+    padding: 20px;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0,0,0,.1);
+
+    .btn {
+      width: 100%;
+      margin-top: 20px;
+    }
+    
+    .block-agreement {
+      margin-top: 40px;
+    }
   }
 }
