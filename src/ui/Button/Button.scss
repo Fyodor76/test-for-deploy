@@ -51,6 +51,10 @@
     color: #606061;
   }
 
+  &:disabled {
+    opacity: 0.3;
+  }
+
 
   &:hover {
     opacity: 0.9;

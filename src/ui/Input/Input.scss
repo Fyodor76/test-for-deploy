@@ -26,10 +26,6 @@
   &-small {
     border-radius: 5px;
   }
-
-  &:focus {
-    border: 3px solid blue;
-  }
 }
 
 .input-container {
@@ -37,9 +33,14 @@
   align-items: center;
   border-radius: 15px;
   height: 100%;
-  background-color: #f0f0f0 !important;
+  background-color: #f0f0f0;
   padding: 10px;
   position: relative;
+
+  &.highlight {
+  outline: 2px solid rgba(167, 58, 253, 0.9);;    
+  background-color: white;
+  }
 
   .input-icons {
     position: absolute;
@@ -63,7 +64,7 @@
     outline: none;
 
     &::placeholder {
-      color: #D0CFD4; /* Цвет placeholder */
+      color: #D0CFD4;
     }
   }
 }

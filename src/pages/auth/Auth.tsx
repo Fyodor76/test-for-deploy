@@ -1,9 +1,15 @@
 import { useState, ChangeEvent } from "react";
 import { Button } from "../../ui/Button/Button";
 import { Input } from "../../ui/Input/Input";
+import { Checkbox } from "../../ui/Checkbox/Checkbox";
 
 export const Auth = () => {
   const [inputValue, setInputValue] = useState<string>("+7 ");
+  const [isChecked, setIsChecked] = useState<boolean>(false)
+
+  const handleCheckbox = (checked: boolean) => {
+    setIsChecked(checked)
+  }
 
   const handleInputValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.replace(/\D+/g, ''); // Удаляем все нечисловые символы
@@ -44,11 +50,22 @@ export const Auth = () => {
             onChange={handleInputValue}
           />
         </div>
-        <Button size="large" background="base" color="basic">
+        <Button 
+          size="large" 
+          background="base" 
+          color="basic" 
+          disabled={inputValue.length !== 16 || !isChecked}
+        >
           Получить код
         </Button>
         <div className="block-agreement">
-          <span>Соглашаюсь с правилами пользования торговой площадкой и возврата</span>
+          <Checkbox
+            label="Соглашаюсь с правилами пользования торговой площадкой и возврата"
+            checked={isChecked}
+            size="small"
+            color="base"
+            onChange={handleCheckbox}
+          />
         </div>
       </div>
     </div>
