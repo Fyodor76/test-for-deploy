@@ -94,8 +94,13 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
     {showSubtitles && (
       <div className="subtitles__container">
         {subitems.map((subitem, index) => (
-          <div key={index}>
-            <a href={subitem}>{subitem}</a>
+          <div className='subtitles__content'>
+            <div key={index}>
+            <span>{subitem}</span>
+          </div>
+          <div>
+          <ArrowForwardIcon fontSize="small" className="icon-arrow"/>
+          </div>
           </div>
         ))}
       </div>
