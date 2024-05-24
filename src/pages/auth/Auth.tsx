@@ -4,11 +4,15 @@ import { Input } from "../../ui/Input/Input";
 import { Checkbox } from "../../ui/Checkbox/Checkbox";
 
 export const Auth = () => {
-  const [inputValue, setInputValue] = useState<string>("+7 ");
+  const [inputValue, setInputValue] = useState<string>("");
   const [isChecked, setIsChecked] = useState<boolean>(false)
 
   const handleCheckbox = (checked: boolean) => {
     setIsChecked(checked)
+  }
+
+  const clearInput = () => {
+    setInputValue("")
   }
 
   const handleInputValue = (event: ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +52,8 @@ export const Auth = () => {
             placeholder="+7 ___ ___ __ __"
             value={inputValue}
             onChange={handleInputValue}
+            onClick={clearInput}
+            isCloseIcon={true}
           />
         </div>
         <Button 

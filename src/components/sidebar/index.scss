@@ -2,32 +2,75 @@
 
 .sidebar {
   position: fixed;
-  top: 92px;
+  top: 91.2px;
   bottom: 0;
-  width: 320px;
   background-color: white;
   z-index: 100;
-  padding-top: 30px;
-
 
   &__container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+   position: relative;
+   display: flex;
+   height: 100%;
+   padding-right: 10px;
 
-    &__elements {
-      padding-left: 50px;
+    .categories__container {
+      border: 1px solid gainsboro;
+      display: flex;
+      min-width: 240px;
+      flex-direction: column;
+      padding-top: 30px;
+      height: 100%;
+      gap: 7px;
+    }
 
-      a {
-        font-family: Ubuntu;
-        cursor: pointer;
-        text-decoration: none;  // Убираем подчеркивание по умолчанию
+    .category-block {
+      width: 220px;
+      margin: 0 auto;
 
-        &:hover {
-          color: $second-primary-color;  // Цвет ссылки при наведении
-          text-decoration: underline;  // Добавляем подчеркивание при наведении
+      .category-content {
+        justify-content: space-between;
+        padding: 4px 10px;
+        min-height: 25px;
+        display: flex;
+
+        &.active {
+          border-radius: 10px;
+          background-color: rgb(249, 244, 244);
+          cursor: pointer;
         }
+
+        .title span {
+          font-size: 17px;
+        }
+
+        a {
+          font-family: Ubuntu;
+          cursor: pointer;
+          color: black;
+          text-decoration: none;  // Убираем подчеркивание по умолчанию
+  
+          &:hover {
+            color: $second-primary-color;  // Цвет ссылки при наведении
+            text-decoration: underline;  // Добавляем подчеркивание при наведении
+          }
+        }
+  
+        &:hover .subtitles__container {
+          display: block;
+        }
+      }
+    }
+
+    .subtitles__container {
+      padding-top: 30px;
+      width: 280px;
+      border-right: 1px solid gainsboro;
+      height: 100%;
+
+      & a {
+        color: black;
       }
     }
   }
 }
+
