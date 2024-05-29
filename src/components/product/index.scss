@@ -1,0 +1,27 @@
+.product {
+    width: 350px;
+    height: 480px;
+    border: 1px solid gainsboro;
+    overflow: auto;
+    border-radius: 12px;
+    background: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+
+    .picture {
+        min-width: 90px;
+        min-height: 330px;
+        border: 1px solid black;
+    }
+
+    .root_name {
+        font-size: 25px;
+    }
+
+    .subj_name, .brand_name {
+        font-size: 20px;
+    }
+}

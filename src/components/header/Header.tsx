@@ -2,7 +2,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import { Transition } from 'react-transition-group';
 import Hamburger from 'hamburger-react';
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useContext } from 'react';
 
 import logo from '../../assets/logo.svg';
 import { Sidebar } from '../sidebar/Sidebar.tsx';
@@ -10,17 +10,19 @@ import { Input } from '../../ui/Input/Input.tsx';
 import './index.scss';
 import {Link} from "react-router-dom";
 import {Button} from "../../ui/Button/Button.tsx";
+import { ProductsContext, filterProducts } from '../../context/ProductsContext.tsx';
 
 
 export const Header = () =>  {
   const [isOpen, setOpen] = useState(false);
   const [value, setValue] = useState<string>('');
+  const {dispatch} = useContext(ProductsContext)
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const v = event.target.value
-
-    setValue(v)
-  }
+    const v = event.target.value;
+    setValue(v);
+    dispatch(filterProducts(v));
+  };
 
   const clearInput = () => {
     setValue("")

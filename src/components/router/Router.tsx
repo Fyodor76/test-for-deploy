@@ -1,6 +1,7 @@
 import { useRoutes, Navigate } from 'react-router-dom';
 
 import { Auth } from '../../pages/auth/Auth.tsx';
+import { Main } from '../../pages/main/Main.tsx';
 
 interface RouteType {
     path: string;
@@ -10,7 +11,7 @@ interface RouteType {
 const routes: RouteType[] = [
   {
     path: '/wb-front/',
-    element: <div>Main page</div>,
+    element: <Main/>,
   },
   {
     path: '/wb-front/login/',

@@ -1,0 +1,12 @@
+.main {
+    background-color: rgb(252, 244, 244);
+
+    .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 150px;
+    width: 80%;
+    margin: 50px auto;
+
+    }
+}
