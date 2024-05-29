@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react"
-import { ProductType } from "../../types/ProductType"
+import { useContext } from "react"
 import { Product } from "../../components/product/Product"
 import { ProductsContext } from "../../context/ProductsContext"
 

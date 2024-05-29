@@ -1,7 +1,8 @@
 import './index.scss';
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import axios from 'axios';
+import { ProductsContext, filterProducts } from '../../context/ProductsContext';
 
 interface CategoriesType {
   id: number;
@@ -52,7 +53,12 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
   const [subitems, setSubitems] = useState<string[]>([]);
   const [showSubtitles, setShowSubtitles] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<number>(0)
+  const {dispatch} = useContext(ProductsContext)
 
+  const setCategory = (v: string) => {
+    dispatch(filterProducts(v));
+  
+  }
 
   useEffect(() => {
     const usedCategories: any = [];
@@ -113,7 +119,7 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
           onMouseEnter={() => handleMouseEnter(c)}
         >
           <div className={`category-content ${c.id === activeItem ? "active" : ''}`}>
-            <div className="title">
+            <div className="title" onClick={() => setCategory(c.title)}>
               <span>{c.title}</span>
             </div>
             {c.id === activeItem && <div>
@@ -127,7 +133,7 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
       <div className="subtitles__container">
         {subitems.map((subitem, index) => (
           <div className='subtitles__content'>
-            <div key={`${index}-subtitles`}>
+            <div key={`${index}-subtitles`} onClick={() => setCategory(subitem)}>
             <span>{subitem}</span>
           </div>
           <div>
