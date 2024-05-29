@@ -118,8 +118,8 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
           className="category-block"
           onMouseEnter={() => handleMouseEnter(c)}
         >
-          <div className={`category-content ${c.id === activeItem ? "active" : ''}`}>
-            <div className="title" onClick={() => setCategory(c.title)}>
+          <div className={`category-content ${c.id === activeItem ? "active" : ''}`} onClick={() => setCategory(c.title)}>
+            <div className="title" >
               <span>{c.title}</span>
             </div>
             {c.id === activeItem && <div>
@@ -132,8 +132,8 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
     {showSubtitles && (
       <div className="subtitles__container">
         {subitems.map((subitem, index) => (
-          <div className='subtitles__content'>
-            <div key={`${index}-subtitles`} onClick={() => setCategory(subitem)}>
+          <div className='subtitles__content' onClick={() => setCategory(subitem)}>
+            <div key={`${index}-subtitles`}>
             <span>{subitem}</span>
           </div>
           <div>
