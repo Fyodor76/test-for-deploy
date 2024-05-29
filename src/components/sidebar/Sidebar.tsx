@@ -117,8 +117,9 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
           key={c.id}
           className="category-block"
           onMouseEnter={() => handleMouseEnter(c)}
+          onClick={() => setCategory(c.title)}
         >
-          <div className={`category-content ${c.id === activeItem ? "active" : ''}`} onClick={() => setCategory(c.title)}>
+          <div className={`category-content ${c.id === activeItem ? "active" : ''}`}>
             <div className="title" >
               <span>{c.title}</span>
             </div>
