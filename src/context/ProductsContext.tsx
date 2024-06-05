@@ -47,6 +47,7 @@ import { setRandomColor } from '../helpers/setRandomColor';
     useEffect(() => {
       const getProducts = async () => {
         const response = await ProductsApi.getProducts();
+        console.log(response, 'res')
         const productsWithBackgroundColor = response.data.rows.map((r) => {
             return {
                 row: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
+import axiosInstance from './axios.config.ts';
 import App from './App.tsx';
 
 import './index.scss';

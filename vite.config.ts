@@ -7,4 +7,7 @@ export default defineConfig({
         react(),
     ],
     base: 'wb-front',
+    server: {
+        port: 3001, // Укажите другой порт, например 3000
+      }
 });
