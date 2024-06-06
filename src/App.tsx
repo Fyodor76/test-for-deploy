@@ -16,8 +16,7 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const categories = await Categories.fetchCategories();
-                console.log(categories);
+                await Categories.fetchCategories();
             } catch (e) {
                 console.log(e);
             }

@@ -2,13 +2,10 @@ import { useContext } from "react"
 import { Product } from "../../components/product/Product"
 import { ProductsContext, filterProducts } from "../../context/ProductsContext"
 import { Button } from "../../ui/Button/Button"
-import { AuthContext } from "../../context/AuthContext"
 
 export const Main = () => {
     const {state, dispatch} = useContext(ProductsContext)
-    const st = useContext(AuthContext)
 
-    console.log(st, 'st')
     const resetFilters = () => {
         dispatch(filterProducts(""));
     }
