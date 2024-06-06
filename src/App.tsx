@@ -8,6 +8,7 @@ import './index.scss';
 import { ProductsProvider } from './context/ProductsContext.tsx';
 import { useEffect } from 'react';
 import { Categories } from './api/Categories.ts';
+import { AuthProvider } from './context/AuthContext.tsx';
   
 
 function App() {
@@ -28,14 +29,16 @@ function App() {
     
 
     return (
+        <AuthProvider> {/* Оборачиваем все приложение в AuthProvider */}
         <div className="app-container">
-                    <ProductsProvider>
-                        <Header/>
-                        <Router/>
-                        <Footer/>
-                    </ProductsProvider>
-            <ToastContainer {...toastConfig} />
+          <ProductsProvider>
+            <Header />
+            <Router />
+            <Footer />
+          </ProductsProvider>
+          <ToastContainer {...toastConfig} />
         </div>
+      </AuthProvider>
     );
 }
 export default App;

@@ -87,7 +87,7 @@
   }
 
   &__modal__login {
-    width: 300px;
+    width: 330px;
     justify-content: center;
     align-items: center;
     height: 80px;
@@ -101,10 +101,11 @@
     border-bottom: 10px solid #fff;
     box-shadow: 0 0 20px rgba(0,0,0,.1);
     border-radius: 20px;
+  }
 
-      & button {
-        color: black;
-    }
+  &__modal__profile {
+    display: flex;
+    gap: 10px;
   }
 }
 

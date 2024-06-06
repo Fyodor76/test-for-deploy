@@ -1,9 +1,10 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useContext } from "react";
 import { Button } from "../../ui/Button/Button";
 import { Input } from "../../ui/Input/Input";
 import { AuthService } from "../../api/AuthService";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../const/toastConfig";
+import { AuthContext, login } from "../../context/AuthContext";
 
 interface LoginProps {
   onSwitch: () => void;
@@ -12,6 +13,7 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ onSwitch }) => {
   const [formData, setFormData] = useState({ login: '', password: '' });
   const navigate = useNavigate();
+  const {dispatch} = useContext(AuthContext)
 
   const clearInput = (name: string) => {
     setFormData(prevState => ({ ...prevState, [name]: '' }));
@@ -25,7 +27,8 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      await AuthService.login(formData.login, formData.password, navigate);
+      const res = await AuthService.login(formData.login, formData.password, navigate);
+      dispatch(login(res.user))
       showToast('success', 'Login successful!');
     } catch (error) {
       showToast('error', 'Error during login. Please try again.');
