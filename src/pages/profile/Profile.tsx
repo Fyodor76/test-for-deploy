@@ -105,7 +105,7 @@ export const Profile: React.FC = () => {
                 </div>
               )}
             </div>
-            <Button size="large" background="primary" color="basic">Сохранить изменения</Button>
+            <Button size="large" background="base" color="basic">Сохранить изменения</Button>
           </form>
           <div className="profile-picture">
             {preview && <img src={preview.preview} alt="Profile" />}
