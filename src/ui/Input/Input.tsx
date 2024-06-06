@@ -1,73 +1,65 @@
-import { ChangeEvent, MouseEvent, useEffect, FC } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
+
 interface InputType {
-    placeholder: string;
-    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-    onClick?: (event: MouseEvent<SVGSVGElement>) => void;
-    value: string;
-    isCloseIcon?: boolean;
-    isSearchIcon?: boolean
+  name: string;
+  placeholder?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onClick?: (name: string) => void;
+  value?: string;
+  isCloseIcon?: boolean;
+  isSearchIcon?: boolean;
 }
 
 export const Input: FC<InputType> = ({
-  placeholder = "", 
-  onChange = Function.prototype,
-  onClick, 
-  value = "", 
-  isCloseIcon = false, 
+  name,
+  placeholder = "",
+  onChange = () => {},
+  onClick,
+  value = "",
+  isCloseIcon = false,
   isSearchIcon = false
- }) => {
- const handleMouseEnter = (event: MouseEvent<HTMLInputElement>) => {
-   const parent = event.currentTarget.parentNode as HTMLElement; // Приведение типа
-   if (parent && parent.classList) {
-     parent.classList.add('highlight');
-   }
- };
+}) => {
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
- const handleMouseLeave = (event: MouseEvent<HTMLInputElement>) => {
-   const parent = event.currentTarget.parentNode as HTMLElement; // Приведение типа
-   if (parent && parent.classList) {
-     parent.classList.remove('highlight');
-   }
- };
- 
- useEffect(() => {
-    const input = document.querySelector('.input');
-    const inputContainer = document.querySelector('.input-container');
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
 
-    const handleFocus = () => {
-      inputContainer?.classList?.add('highlight');
-    };
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
-    const handleBlur = () => {
-      inputContainer?.classList.remove('highlight');
-    };
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
 
-    input?.addEventListener('focus', handleFocus);
-    input?.addEventListener('blur', handleBlur);
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
 
-    return () => {
-      input?.removeEventListener('focus', handleFocus);
-      input?.removeEventListener('blur', handleBlur);
-    };
-  }, []);
-
- return (
-   <div className="input-container">
-     {value && <div className="input-icons">
-       { isCloseIcon && <CloseIcon className="icon" onClick={onClick}/>}
-       { isSearchIcon && <SearchIcon className="icon"/>}
-     </div>}
-     <input
-       type="text"
-       placeholder={placeholder}
-       value={value}
-       onChange={(event) => onChange(event)}
-       onMouseEnter={handleMouseEnter}
-       onMouseLeave={handleMouseLeave}
-       className="input"
-     />
-   </div>
- );
+  return (
+    <div className={`input-container ${isHovered || isFocused ? 'highlight' : ''}`}>
+      {value && (
+        <div className="input-icons">
+          {isCloseIcon && <CloseIcon className="icon" onClick={() => onClick && onClick(name)} />}
+          {isSearchIcon && <SearchIcon className="icon" />}
+        </div>
+      )}
+      <input
+        type="text"
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={(event) => onChange(event)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        className="input"
+      />
+    </div>
+  );
 };

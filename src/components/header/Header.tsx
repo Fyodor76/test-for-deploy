@@ -15,17 +15,17 @@ import { ProductsContext, filterProducts } from '../../context/ProductsContext.t
 
 export const Header = () =>  {
   const [isOpen, setOpen] = useState(false);
-  const [value, setValue] = useState<string>('');
+  const [value, setValue] = useState<{value: string}>({value: ''});
   const {dispatch} = useContext(ProductsContext)
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const v = event.target.value;
-    setValue(v);
-    dispatch(filterProducts(v));
+    const {name, value} = event.target;
+    setValue((prev) => ({...prev, [name]: value}));
+    dispatch(filterProducts(value));
   };
 
-  const clearInput = () => {
-    setValue("")
+  const clearInput = (name: string) => {
+    setValue((prev) => ({...prev, [name]: ''}))
   }
 
 
@@ -49,7 +49,8 @@ export const Header = () =>  {
         <div className="header__input__container">
           <Input
             placeholder="Найти на Wildberries"
-            value={value} 
+            value={value.value} 
+            name="value"
             onChange={onChange}
             onClick={clearInput}
             isCloseIcon

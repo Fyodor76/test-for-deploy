@@ -3,31 +3,32 @@ import { Button } from "../../ui/Button/Button";
 import { Input } from "../../ui/Input/Input";
 import { AuthService } from "../../api/AuthService";
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../../const/toastConfig";
 
 interface LoginProps {
   onSwitch: () => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onSwitch }) => {
-  const [login, setLogin] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [formData, setFormData] = useState({ login: '', password: '' });
   const navigate = useNavigate();
 
-  const handleLoginChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setLogin(event.target.value);
+  const clearInput = (name: string) => {
+    setFormData(prevState => ({ ...prevState, [name]: '' }));
   };
 
-  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      await AuthService.login(login, password, navigate);
-      alert('Login successful!');
+      await AuthService.login(formData.login, formData.password, navigate);
+      showToast('success', 'Login successful!');
     } catch (error) {
-      alert('Error during login. Please try again.');
+      showToast('error', 'Error during login. Please try again.');
     }
   };
 
@@ -38,23 +39,29 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
         <form onSubmit={handleSubmit} className="container-inputs">
           <div>
             <Input
+              name="login"
               placeholder="Login"
-              value={login}
-              onChange={handleLoginChange}
+              value={formData.login}
+              onChange={handleInputChange}
+              onClick={clearInput}
+              isCloseIcon={true}
             />
           </div>
           <div>
             <Input
+              name="password"
               placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
+              value={formData.password}
+              onChange={handleInputChange}
+              onClick={clearInput}
+              isCloseIcon={true}
             />
           </div>
           <Button
             size="large"
             background="base"
             color="basic"
-            disabled={login.length === 0 || password.length === 0}
+            disabled={formData.login.length === 0 || formData.password.length === 0}
           >
             Войти
           </Button>
@@ -66,26 +73,28 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
     </div>
   );
 };
+
+
+
 interface RegisterProps {
   onSwitch: () => void;
 }
 
 const Register: React.FC<RegisterProps> = ({ onSwitch }) => {
-  const [login, setLogin] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
+  const [formData, setFormData] = useState({
+    login: '',
+    password: '',
+    email: '',
+  });
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
-  const handleLoginChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setLogin(event.target.value);
+  const clearInput = (name: string) => {
+    setFormData(prevState => ({ ...prevState, [name]: '' }));
   };
 
-  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
   const handleProfilePictureChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -97,10 +106,11 @@ const Register: React.FC<RegisterProps> = ({ onSwitch }) => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      await AuthService.register(login, password, email, profilePicture);
-      alert('Registration successful!');
+      await AuthService.register(formData.login, formData.password, formData.email, profilePicture);
+      showToast('success', 'Регистрация прошло успешно, теперь вы можете зайти в свой аккаунт');
+      onSwitch()
     } catch (error) {
-      alert('Error during registration. Please try again.');
+      showToast('error', 'Error during registration. Please try again.');
     }
   };
 
@@ -111,23 +121,32 @@ const Register: React.FC<RegisterProps> = ({ onSwitch }) => {
         <form onSubmit={handleSubmit} className="container-inputs">
           <div>
             <Input
+              name="login"
               placeholder="Login"
-              value={login}
-              onChange={handleLoginChange}
+              value={formData.login}
+              onChange={handleInputChange}
+              onClick={clearInput}
+              isCloseIcon={true}
             />
           </div>
           <div>
             <Input
+              name="password"
               placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
+              value={formData.password}
+              onChange={handleInputChange}
+              onClick={clearInput}
+              isCloseIcon={true}
             />
           </div>
           <div>
             <Input
+              name="email"
               placeholder="Email"
-              value={email}
-              onChange={handleEmailChange}
+              value={formData.email}
+              onChange={handleInputChange}
+              onClick={clearInput}
+              isCloseIcon={true}
             />
           </div>
           <div>
@@ -140,7 +159,7 @@ const Register: React.FC<RegisterProps> = ({ onSwitch }) => {
             size="large"
             background="base"
             color="basic"
-            disabled={login.length === 0 || password.length === 0 || email.length === 0}
+            disabled={formData.login.length === 0 || formData.password.length === 0 || formData.email.length === 0}
           >
             Зарегистрироваться
           </Button>
@@ -152,7 +171,6 @@ const Register: React.FC<RegisterProps> = ({ onSwitch }) => {
     </div>
   );
 };
-
 
 export const AuthPage: React.FC = () => {
   const [isRegister, setIsRegister] = useState<boolean>(false);

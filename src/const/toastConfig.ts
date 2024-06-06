@@ -1,16 +1,15 @@
-import { Slide } from 'react-toastify';
-import { ToastTransitionProps } from 'react-toastify';
-import { ToastPosition } from 'react-toastify';
+import { toast, ToastOptions, Slide, ToastPosition, ToastTransitionProps } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-interface toastType {
+interface ToastType {
   position: ToastPosition | undefined;
   autoClose: number;
   hideProgressBar: boolean;
-  newestOnTop: false;
+  newestOnTop: boolean;
   closeOnClick: boolean;
-  rtl: false;
+  rtl: boolean;
   pauseOnFocusLoss: boolean;
-  raggable: boolean;
+  draggable: boolean;
   pauseOnHover: boolean;
   theme: string;
   transition: ({
@@ -24,16 +23,28 @@ interface toastType {
   }: ToastTransitionProps) => React.JSX.Element;
 }
 
-export const toastConfig: toastType = {
-  position: 'top-right',
-  autoClose: 1000,
+export const toastConfig: ToastType = {
+  position: 'bottom-right',
+  autoClose: 3000,
   hideProgressBar: true,
   closeOnClick: false,
   pauseOnFocusLoss: true,
-  raggable: true,
+  draggable: true,
   pauseOnHover: false,
   newestOnTop: false,
   rtl: false,
   theme: 'light',
   transition: Slide,
+};
+
+export const showToast = (type: 'success' | 'error', message: string) => {
+  const options: ToastOptions = {
+    ...toastConfig,
+  };
+
+  if (type === 'success') {
+    toast.success(message, options);
+  } else {
+    toast.error(message, options);
+  }
 };
