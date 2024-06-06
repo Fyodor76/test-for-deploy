@@ -58,11 +58,14 @@ export const AuthService = {
 
   updateUserProfile: async (formData: FormData) => {
     try {
+      console.log(formData, 'formData')
       const response = await axiosInstance.put('/api/user/profile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+      console.log(response.data, 'response data')
       return response.data;
     } catch (error) {
       console.error('Error updating profile:', error);
