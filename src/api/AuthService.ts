@@ -38,7 +38,6 @@ export const AuthService = {
 
   fetchProfile: async () => {
     try {
-      console.log('dasasd')
       const response = await axiosInstance.get('/api/user/profile', { withCredentials: true });
       return response.data;
     } catch (error) {
