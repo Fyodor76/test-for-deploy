@@ -35,3 +35,10 @@
   font-size: 28px;
   color: #262626;
 }
+
+
+@media (max-width: 768px) {
+  .modal-content {
+    min-width: 280px;
+  }
+}
