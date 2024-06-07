@@ -5,6 +5,7 @@ import { AuthService } from '../../api/AuthService';
 import { Button } from '../../ui/Button/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import { Input } from '../../ui/Input/Input';
+import profilePhoto from '../../assets/profile-photo.png'
 
 interface UserProfile {
   firstName: string;
@@ -108,7 +109,7 @@ export const Profile: React.FC = () => {
             <Button size="large" background="base" color="basic">Сохранить изменения</Button>
           </form>
           <div className="profile-picture">
-            {preview && <img src={preview.preview} alt="Profile" />}
+            {<img src={preview.preview || profilePhoto} alt="Profile" />}
           </div>
         </div>
       </div>

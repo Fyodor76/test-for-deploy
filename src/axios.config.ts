@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = process.env.NODE_ENV === 'production' ? 'http://31.129.63.84:8080' : 'http://localhost:8080';
+const baseURL = process.env.NODE_ENV === 'production' ? 'https://fydor-node-app.ru' : 'http://localhost:8080';
 
 console.log(`Running in ${process.env.NODE_ENV} mode. Using baseURL: ${baseURL}`);
 
