@@ -6,6 +6,7 @@ import { Button } from '../../ui/Button/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import { Input } from '../../ui/Input/Input';
 import profilePhoto from '../../assets/profile-photo.png'
+import axiosInstance from '../../axios.config';
 
 interface UserProfile {
   firstName: string;
@@ -35,7 +36,7 @@ export const Profile: React.FC = () => {
 
     useEffect(() => {
       if (profile.profilePicture && typeof profile.profilePicture === 'string') {
-        setPreview({ preview: `http://localhost:8080${profile.profilePicture}`, closeIcon: false });
+        setPreview({ preview: `${axiosInstance}${profile.profilePicture}`, closeIcon: false });
       }
     }, [profile.profilePicture]);
 
