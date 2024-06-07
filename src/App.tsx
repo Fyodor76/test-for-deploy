@@ -6,14 +6,10 @@ import { Router } from './components/router/Router.tsx';
 import { toastConfig } from './const/toastConfig.ts';
 import './index.scss';
 import { AuthProvider } from './context/AuthContext.tsx';
-import { Loader } from './components/loader/Loader.tsx';
 import { ProductsProvider } from './context/ProductContext.tsx';
   
 
 function App() {
-
-    
-
     return (
         <AuthProvider>
           <ProductsProvider>

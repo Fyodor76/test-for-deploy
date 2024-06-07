@@ -1,6 +1,3 @@
-import { useContext } from "react"
-import { Product } from "../../components/product/Product"
-import { ProductsContext, filterProducts } from "../../context/ProductsContext"
 import { Button } from "../../ui/Button/Button"
 
 export const Main = () => {
