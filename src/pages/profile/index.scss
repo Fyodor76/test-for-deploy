@@ -1,6 +1,6 @@
 .profile-container {
     width: 50%;
-    margin: 150px auto;
+    margin: 30px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
@@ -16,8 +16,8 @@
   .profile-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    width: 50%;
+    gap: 35px;
+    width: 70%;
   }
   
   .profile-form input[type="file"] {
@@ -39,8 +39,8 @@
   }
   
   .profile-picture img {
-    max-width: 50%;
-    max-height: 50%;
+    max-width: 70%;
+    max-height: 70%;
     border-radius: 10px;
   }
   
@@ -69,4 +69,27 @@
       margin-top: 30px;
       width: 90%;
     }
+  }
+
+  .recommendations-selector {
+    margin-top: 30px;
+  }
+  
+  .category {
+    margin-bottom: 20px;
+  }
+  
+  .category-header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .group-product {
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .block-recommendation {
+    margin-top: 50px;
   }

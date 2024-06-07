@@ -10,7 +10,6 @@ import { Input } from '../../ui/Input/Input.tsx';
 import './index.scss';
 import {Link, useNavigate} from "react-router-dom";
 import {Button} from "../../ui/Button/Button.tsx";
-import { ProductsContext, filterProducts } from '../../context/ProductsContext.tsx';
 import { AuthContext, logoutAction } from '../../context/AuthContext.tsx';
 import { AuthService } from '../../api/AuthService.ts';
 import { showToast } from '../../const/toastConfig.ts';
@@ -19,7 +18,7 @@ import { showToast } from '../../const/toastConfig.ts';
 export const Header = () =>  {
   const [isOpen, setOpen] = useState(false);
   const [value, setValue] = useState<{value: string}>({value: ''});
-  const {dispatch} = useContext(ProductsContext)
+ // const {dispatch} = useContext(ProductsContext)
   const {state: authContext, dispatch: dispatchAuth} = useContext(AuthContext)
   const navigate = useNavigate()
 
@@ -33,7 +32,7 @@ export const Header = () =>  {
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
     setValue((prev) => ({...prev, [name]: value}));
-    dispatch(filterProducts(value));
+   // dispatch(filterProducts(value));
   };
 
   const clearInput = (name: string) => {

@@ -8,6 +8,12 @@ import { Input } from '../../ui/Input/Input';
 import profilePhoto from '../../assets/profile-photo.png'
 import { baseURL } from '../../const/baseUrl';
 import { LazyImage } from '../../components/lazyImage/LazyImage';
+import axiosInstance from '../../axios.config';
+import { Checkbox } from '../../ui/Checkbox/Checkbox';
+import { ProductsContext } from '../../context/ProductContext';
+import { useModal } from '../../hooks/Modal/useModal';
+import { Modal } from '../../components/Modal/Modal';
+import { AnimatePresence } from 'framer-motion';
 
 interface UserProfile {
   firstName: string;
@@ -34,6 +40,7 @@ export const Profile: React.FC = () => {
       profilePicture: authState.user?.profilePicture || "",
     });
     const [preview, setPreview] = useState<PreviewType>({ preview: "", closeIcon: false });
+    const {openModal, closeModal, modalState} = useModal()
 
     useEffect(() => {
       if (profile.profilePicture && typeof profile.profilePicture === 'string') {
@@ -108,12 +115,111 @@ export const Profile: React.FC = () => {
                 </div>
               )}
             </div>
-            <Button size="large" background="base" color="basic">Сохранить изменения</Button>
+            <Button 
+              size="large"
+              background="base" 
+              color="basic">
+              Сохранить изменения
+            </Button>
           </form>
           <div className="profile-picture">
             <LazyImage src={preview.preview || profilePhoto} alt="Profile" />
           </div>
         </div>
+        <div className="block-recommendation">
+          <h2>Также вы можете выбрать категории и группы товаров, которые хотели бы видеть в рекомендациях</h2>
+          <div>
+            <Button 
+             size="large"
+             background="base" 
+             color="basic"
+             onClick={() => openModal(<RecommendationsSelector/>)}>
+                Выбрать категории
+            </Button>
+          </div>
+        </div>
+       <AnimatePresence initial={false}>
+        {modalState.isOpen && <Modal closeModal={closeModal} template={modalState.template} show={modalState.isOpen}/>}
+       </AnimatePresence>
+      </div>
+    );
+  };
+
+  
+  const RecommendationsSelector: React.FC = () => {
+    const { state } = useContext(ProductsContext);
+    const { categories, groupProducts } = state;
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [selectedGroupProducts, setSelectedGroupProducts] = useState<string[]>([]);
+
+    console.log(state, 'state')
+  
+    const handleCategoryChange = (categoryId: string) => {
+      setSelectedCategories((prevSelectedCategories) =>
+        prevSelectedCategories.includes(categoryId)
+          ? prevSelectedCategories.filter((id) => id !== categoryId)
+          : [...prevSelectedCategories, categoryId]
+      );
+    };
+  
+    const handleGroupProductChange = (groupProductId: string) => {
+      setSelectedGroupProducts((prevSelectedGroupProducts) =>
+        prevSelectedGroupProducts.includes(groupProductId)
+          ? prevSelectedGroupProducts?.filter((id) => id !== groupProductId)
+          : [...prevSelectedGroupProducts, groupProductId]
+      );
+    };
+  
+    const handleSaveRecommendations = async () => {
+      try {
+        await Promise.all(
+          selectedGroupProducts?.map((groupProductId) =>
+            axiosInstance.post('/api/recommendation', {
+              categoryId: groupProducts.find((gp) => gp.id === groupProductId)?.categoryId,
+              groupProductId,
+            })
+          )
+        );
+        alert('Recommendations saved successfully');
+      } catch (error) {
+        console.error('Error saving recommendations:', error);
+      }
+    };
+  
+    return (
+      <div className="recommendations-selector">
+        {categories && categories.length > 0 ? (
+          categories.map((category) => (
+            <div key={category.id} className="category">
+              <div className="category-header">
+                <Checkbox
+                  label={category.name}
+                  checked={selectedCategories.includes(category.id)}
+                  onChange={() => handleCategoryChange(category.id)}
+                  size="medium"
+                  color="primary"
+                />
+              </div>
+              {groupProducts && groupProducts.length > 0 && 
+                groupProducts.filter((groupProduct) => groupProduct.categoryId === category.id)
+                  .map((groupProduct) => (
+                    <div key={groupProduct.id} className="group-product">
+                      <Checkbox
+                        label={groupProduct.name}
+                        checked={selectedGroupProducts.includes(groupProduct.id)}
+                        onChange={() => handleGroupProductChange(groupProduct.id)}
+                        size="small"
+                        color="secondary"
+                      />
+                    </div>
+                  ))
+              }
+            </div>
+          ))
+        ) : (
+          <div>No categories available.</div>
+        )}
+        <button onClick={handleSaveRecommendations}>Save Recommendations</button>
       </div>
     );
   };

@@ -5,11 +5,11 @@ import { Header } from './components/header/Header.tsx';
 import { Router } from './components/router/Router.tsx';
 import { toastConfig } from './const/toastConfig.ts';
 import './index.scss';
-import { ProductsProvider } from './context/ProductsContext.tsx';
 import { useEffect, useState } from 'react';
 import { Categories } from './api/Categories.ts';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { Loader } from './components/loader/Loader.tsx';
+import { ProductsProvider } from './context/ProductContext.tsx';
   
 
 function App() {
@@ -34,15 +34,15 @@ function App() {
 
     return (
         <AuthProvider>
-        <div className="app-container">
           <ProductsProvider>
+        <div className="app-container">
             <Header />
             <Router />
             <Footer />
             {isLoading &&<Loader/>}
-          </ProductsProvider>
           <ToastContainer {...toastConfig} />
         </div>
+          </ProductsProvider>
       </AuthProvider>
     );
 }
