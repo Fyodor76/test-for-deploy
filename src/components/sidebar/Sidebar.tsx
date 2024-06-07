@@ -31,7 +31,7 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
 
   const sidebarStyle = {
     transition: 'left 300ms ease-in-out',
-    left: isOpen ? 0 : -250,
+    left: isOpen ? 0 : -253,
   };
 
   useEffect(() => {

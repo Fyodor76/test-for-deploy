@@ -128,7 +128,7 @@ export const Profile: React.FC = () => {
         </div>
         <div className="block-recommendation">
           <h2>Также вы можете выбрать категории и группы товаров, которые хотели бы видеть в рекомендациях</h2>
-          <div>
+          <div className='block-button'>
             <Button 
              size="large"
              background="base" 
