@@ -48,7 +48,12 @@
   @media (max-width: 768px) {
 
     .profile-container {
+      margin-top: 10px;
       width: 90%;
+    }
+
+    h2 {
+      text-align: center;
     }
     
     .profile-content {
