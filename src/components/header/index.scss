@@ -110,8 +110,21 @@
 }
 
 @media (max-width: 768px) {
-  .header__logo {
-    display: none;
+  .header {
+    .header__logo {
+      display: none;
+    }
+  
+    .header__input__container {
+      display: none;
+    }
+  
+    .container {
+      width: 90% !important;
+      max-width: 90% !important;
+      justify-content: space-between;
+      padding-left: 20px !important;
+    }
   }
 }
 
