@@ -44,3 +44,23 @@
     border-radius: 10px;
   }
   
+
+  @media (max-width: 768px) {
+
+    .profile-container {
+      width: 90%;
+    }
+    
+    .profile-content {
+      flex-wrap: wrap;
+    }
+
+    .profile-form {
+      width: 90%;
+    }
+
+    .profile-picture {
+      margin-top: 30px;
+      width: 90%;
+    }
+  }

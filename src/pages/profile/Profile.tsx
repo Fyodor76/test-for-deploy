@@ -36,7 +36,6 @@ export const Profile: React.FC = () => {
 
     useEffect(() => {
       if (profile.profilePicture && typeof profile.profilePicture === 'string') {
-        console.log(baseURL, 'baseUrl')
         setPreview({ preview: `${baseURL}${profile.profilePicture}`, closeIcon: false });
       }
     }, [profile.profilePicture]);
