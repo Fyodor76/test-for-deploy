@@ -6,7 +6,7 @@ import { Button } from '../../ui/Button/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import { Input } from '../../ui/Input/Input';
 import profilePhoto from '../../assets/profile-photo.png'
-import { baseURL } from '../../axios.config';
+import { baseURL } from '../../const/baseUrl';
 
 interface UserProfile {
   firstName: string;
