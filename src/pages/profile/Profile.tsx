@@ -36,6 +36,7 @@ export const Profile: React.FC = () => {
 
     useEffect(() => {
       if (profile.profilePicture && typeof profile.profilePicture === 'string') {
+        console.log(`${axiosInstance}${profile.profilePicture}`)
         setPreview({ preview: `${axiosInstance}${profile.profilePicture}`, closeIcon: false });
       }
     }, [profile.profilePicture]);
