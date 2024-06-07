@@ -1,4 +1,4 @@
-import React, { useContext, useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import React, { useContext, useState, ChangeEvent, FormEvent, useEffect, FC } from 'react';
 import { AuthContext, updateUser } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { AuthService } from '../../api/AuthService';
@@ -8,12 +8,15 @@ import { Input } from '../../ui/Input/Input';
 import profilePhoto from '../../assets/profile-photo.png'
 import { baseURL } from '../../const/baseUrl';
 import { LazyImage } from '../../components/lazyImage/LazyImage';
-import axiosInstance from '../../axios.config';
 import { Checkbox } from '../../ui/Checkbox/Checkbox';
 import { ProductsContext } from '../../context/ProductContext';
 import { useModal } from '../../hooks/Modal/useModal';
 import { Modal } from '../../components/Modal/Modal';
 import { AnimatePresence } from 'framer-motion';
+import { CategoryType, GroupProductType } from '../../types/ProductTypes';
+import axiosInstance from '../../axios.config';
+import { showToast } from '../../const/toastConfig';
+import { RecommendationsService } from '../../api/Recommendations';
 
 interface UserProfile {
   firstName: string;
@@ -133,7 +136,7 @@ export const Profile: React.FC = () => {
              size="large"
              background="base" 
              color="basic"
-             onClick={() => openModal(<RecommendationsSelector/>)}>
+             onClick={() => openModal(<Recommendations closeModal={closeModal}/>)}>
                 Выбрать категории
             </Button>
           </div>
@@ -145,81 +148,165 @@ export const Profile: React.FC = () => {
     );
   };
 
-  
-  const RecommendationsSelector: React.FC = () => {
+  interface RecommendationsType {
+    closeModal: () => void;
+  }
+
+  interface SelectedGroupsType {
+    categoryId: string;
+    groupIds: string[]
+  }
+
+  const Recommendations: FC<RecommendationsType> = ({ closeModal }) => {
     const { state } = useContext(ProductsContext);
     const { categories, groupProducts } = state;
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-    const [selectedGroupProducts, setSelectedGroupProducts] = useState<string[]>([]);
+    const [selectedGroups, setSelectedGroups] = useState<SelectedGroupsType[]>([]);
 
-    console.log(state, 'state')
-  
-    const handleCategoryChange = (categoryId: string) => {
-      setSelectedCategories((prevSelectedCategories) =>
-        prevSelectedCategories.includes(categoryId)
-          ? prevSelectedCategories.filter((id) => id !== categoryId)
-          : [...prevSelectedCategories, categoryId]
-      );
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        const response = await RecommendationsService.fetchRecommendations();
+        setSelectedGroups(response);
+      } catch (error) {
+        console.error('Error fetching recommendations:', error);
+      }
+    };
+
+    fetchRecommendations();
+  }, []);
+    
+    const handleSelectedGroups = (categoryId: string, groupId: string) => {
+      setSelectedGroups((prevSelectedGroups) => {
+        const categoryIndex = prevSelectedGroups.findIndex((sGr) => sGr.categoryId === categoryId);
+        if (categoryIndex === -1) {
+          return [...prevSelectedGroups, { categoryId, groupIds: [groupId] }];
+        }
+        const category = prevSelectedGroups[categoryIndex];
+        const isGroupSelected = category.groupIds.includes(groupId);
+        const updatedGroupIds = isGroupSelected
+          ? category.groupIds.filter((id) => id !== groupId)
+          : [...category.groupIds, groupId];
+        const updatedCategories = [...prevSelectedGroups];
+        updatedCategories[categoryIndex] = { ...category, groupIds: updatedGroupIds };
+        return updatedCategories;
+      });
     };
   
-    const handleGroupProductChange = (groupProductId: string) => {
-      setSelectedGroupProducts((prevSelectedGroupProducts) =>
-        prevSelectedGroupProducts.includes(groupProductId)
-          ? prevSelectedGroupProducts?.filter((id) => id !== groupProductId)
-          : [...prevSelectedGroupProducts, groupProductId]
-      );
+    const handleSelectAllGroups = (categoryId: string) => {
+      setSelectedGroups((prevSelectedGroups) => {
+        const categoryGroups = groupProducts.filter((group) => group.categoryId === categoryId).map((group) => group.id);
+        const categoryIndex = prevSelectedGroups.findIndex((sGr) => sGr.categoryId === categoryId);
+        if (categoryIndex === -1) {
+          return [...prevSelectedGroups, { categoryId, groupIds: categoryGroups }];
+        }
+        const category = prevSelectedGroups[categoryIndex];
+        const isAllSelected = category.groupIds.length === categoryGroups.length;
+        const updatedGroupIds = isAllSelected ? [] : categoryGroups;
+        const updatedCategories = [...prevSelectedGroups];
+        updatedCategories[categoryIndex] = { ...category, groupIds: updatedGroupIds };
+        return updatedCategories;
+      });
     };
-  
+
     const handleSaveRecommendations = async () => {
       try {
         await Promise.all(
-          selectedGroupProducts?.map((groupProductId) =>
-            axiosInstance.post('/api/recommendation', {
-              categoryId: groupProducts.find((gp) => gp.id === groupProductId)?.categoryId,
-              groupProductId,
-            })
+          selectedGroups.flatMap((category) =>
+            category.groupIds.map((groupProductId) =>
+              axiosInstance.post('/api/recommendation', {
+                categoryId: category.categoryId,
+                groupProductId,
+              })
+            )
           )
         );
-        alert('Recommendations saved successfully');
+        showToast('success', 'Recommendations saved successfully');
+        closeModal();
       } catch (error) {
         console.error('Error saving recommendations:', error);
+        showToast('error', 'Recommendations saved successfully');
       }
     };
   
     return (
       <div className="recommendations-selector">
-        {categories && categories.length > 0 ? (
+        {categories.length > 0 &&
           categories.map((category) => (
-            <div key={category.id} className="category">
-              <div className="category-header">
+            <RecommendationSelector
+              key={category.id}
+              category={category}
+              groups={groupProducts.filter((group) => group.categoryId === category.id)}
+              selectedGroups={selectedGroups}
+              handleSelectedGroups={handleSelectedGroups}
+              handleSelectAllGroups={handleSelectAllGroups}
+            />
+          ))}
+        <Button size="large" background="base" color="basic" onClick={handleSaveRecommendations}>
+          Выбрать категории
+        </Button>
+      </div>
+    );
+  };
+  
+  interface RecommendationSelectorType {
+    category: CategoryType;
+    groups: GroupProductType[];
+    selectedGroups: SelectedGroupsType[];
+    handleSelectedGroups: (categoryId: string, groupId: string) => void;
+    handleSelectAllGroups: (categoryId: string) => void;
+  }
+  
+  const RecommendationSelector: FC<RecommendationSelectorType> = ({
+    category,
+    groups,
+    selectedGroups,
+    handleSelectedGroups,
+    handleSelectAllGroups,
+  }) => {
+    const [isGroupsOpened, setIsGroupsOpened] = useState<boolean>(false);
+  
+    const selectedCategory = selectedGroups.some((sGr) => sGr.categoryId === category.id);
+    const hasSelectedGroup = (groupId: string): boolean =>
+      selectedGroups.find((sGr) => sGr.categoryId === category.id)?.groupIds.includes(groupId) || false;
+
+    const handleGroupsOpened = () => {
+      if (!groups.length) return;
+
+      setIsGroupsOpened((prev) => !prev)
+    }
+  
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div onClick={handleGroupsOpened}>
+          <span style={{ fontSize: '25px' }}>{category.name}</span>
+        </div>
+        {isGroupsOpened && (
+          <div>
+            {groups.length > 0 && (
+              <div>
                 <Checkbox
-                  label={category.name}
-                  checked={selectedCategories.includes(category.id)}
-                  onChange={() => handleCategoryChange(category.id)}
-                  size="medium"
-                  color="primary"
+                  size="small"
+                  color="base"
+                  checked={selectedCategory && groups.every((group) => hasSelectedGroup(group.id))}
+                  onChange={() => handleSelectAllGroups(category.id)}
+                  label="Выбрать все группы"
                 />
               </div>
-              {groupProducts && groupProducts.length > 0 && 
-                groupProducts.filter((groupProduct) => groupProduct.categoryId === category.id)
-                  .map((groupProduct) => (
-                    <div key={groupProduct.id} className="group-product">
-                      <Checkbox
-                        label={groupProduct.name}
-                        checked={selectedGroupProducts.includes(groupProduct.id)}
-                        onChange={() => handleGroupProductChange(groupProduct.id)}
-                        size="small"
-                        color="secondary"
-                      />
-                    </div>
-                  ))
-              }
-            </div>
-          ))
-        ) : (
-          <div>No categories available.</div>
+            )}
+            {groups.map((group) => (
+              <div key={group.id}>
+                <span>{group.name}</span>
+                <Checkbox
+                  size="small"
+                  color="base"
+                  checked={hasSelectedGroup(group.id)}
+                  onChange={() => handleSelectedGroups(category.id, group.id)}
+                />
+              </div>
+            ))}
+          </div>
         )}
-        <button onClick={handleSaveRecommendations}>Save Recommendations</button>
       </div>
     );
   };

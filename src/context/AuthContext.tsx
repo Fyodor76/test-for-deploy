@@ -1,8 +1,8 @@
-import { useReducer, createContext, Dispatch, FC, ReactNode, useEffect } from 'react';
+import { useEffect, useReducer, useState, createContext, FC, ReactNode, Dispatch } from 'react';
+import { Loader } from '../components/loader/Loader';
 import { AuthService } from '../api/AuthService';
 import { User } from '../types/UserType';
 
-// Типы
 type State = {
   isAuth: boolean;
   user: User | null;
@@ -44,6 +44,7 @@ export const AuthContext = createContext<{
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -58,11 +59,17 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         } else {
           console.error('Unexpected error:', error);
         }
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchUser();
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
@@ -85,3 +92,5 @@ export const updateUser = (user: Partial<User>): Action => ({
   type: 'UPDATE_USER',
   payload: user,
 });
+
+export default AuthProvider;

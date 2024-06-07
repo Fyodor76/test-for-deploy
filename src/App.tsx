@@ -10,17 +10,17 @@ import { ProductsProvider } from './context/ProductContext.tsx';
   
 
 function App() {
-    return (
-        <AuthProvider>
-          <ProductsProvider>
+  return (
+    <AuthProvider>
+      <ProductsProvider>
         <div className="app-container">
-            <Header />
-            <Router />
-            <Footer />
+          <Header />
+          <Router />
+          <Footer />
           <ToastContainer {...toastConfig} />
         </div>
-          </ProductsProvider>
-      </AuthProvider>
-    );
+      </ProductsProvider>
+    </AuthProvider>
+  );
 }
 export default App;

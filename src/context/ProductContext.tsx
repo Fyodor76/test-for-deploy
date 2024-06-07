@@ -1,8 +1,9 @@
-import React, { createContext, useReducer, useEffect, Dispatch, ReactNode } from 'react';
+import React, { createContext, useReducer, useEffect, Dispatch, ReactNode, useContext } from 'react';
 import { Categories } from '../api/Categories';
 import { GroupProducts } from '../api/Group-products';
 import { Products } from '../api/Products';
 import { CategoryType, GroupProductType, ProductType } from '../types/ProductTypes';
+import { AuthContext } from './AuthContext';
 
 interface State {
   categories: CategoryType[];
@@ -35,39 +36,42 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export const ProductsContext = createContext<{
-  state: State;
-  dispatch: Dispatch<Action>;
-}>({
-  state: initialState,
-  dispatch: () => null,
-});
-
-export const ProductsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [categoriesResponse, groupProductsResponse, productsResponse] = await Promise.all([
-          Categories.fetchCategories(),
-          GroupProducts.fetchGroupProducts(),
-          Products.fetchProducts(),
-        ]);
-
-        dispatch({ type: 'SET_CATEGORIES', payload: categoriesResponse });
-        dispatch({ type: 'SET_GROUP_PRODUCTS', payload: groupProductsResponse });
-        dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
-      } catch (error) {
-        console.error('Error fetching data:', error);
+    state: State;
+    dispatch: Dispatch<Action>;
+  }>({
+    state: initialState,
+    dispatch: () => null,
+  });
+  
+  export const ProductsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const { state: authState } = useContext(AuthContext);
+    const [state, dispatch] = useReducer(reducer, initialState);
+  
+    useEffect(() => {
+      if (authState.isAuth) {
+        const fetchData = async () => {
+          try {
+            const [categoriesResponse, groupProductsResponse, productsResponse] = await Promise.all([
+              Categories.fetchCategories(),
+              GroupProducts.fetchGroupProducts(),
+              Products.fetchProducts(),
+            ]);
+  
+            dispatch({ type: 'SET_CATEGORIES', payload: categoriesResponse });
+            dispatch({ type: 'SET_GROUP_PRODUCTS', payload: groupProductsResponse });
+            dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+  
+        fetchData();
       }
-    };
-
-    fetchData();
-  }, []);
-
-  return (
-    <ProductsContext.Provider value={{ state, dispatch }}>
-      {children}
-    </ProductsContext.Provider>
-  );
-};
+    }, [authState.isAuth]);
+  
+    return (
+      <ProductsContext.Provider value={{ state, dispatch }}>
+        {children}
+      </ProductsContext.Provider>
+    );
+  };
