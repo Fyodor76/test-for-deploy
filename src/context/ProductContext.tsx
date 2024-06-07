@@ -4,8 +4,6 @@ import { GroupProducts } from '../api/Group-products';
 import { Products } from '../api/Products';
 import { CategoryType, GroupProductType, ProductType } from '../types/ProductTypes';
 
- 
-
 interface State {
   categories: CategoryType[];
   groupProducts: GroupProductType[];

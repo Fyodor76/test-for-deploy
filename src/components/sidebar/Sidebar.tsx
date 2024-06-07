@@ -17,6 +17,7 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
  // const {dispatch} = useContext(ProductsContext)
 
   const setCategory = (v: string) => {
+    console.log(v)
    // dispatch(filterProducts(v));
   }
 

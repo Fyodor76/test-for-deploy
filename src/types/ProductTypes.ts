@@ -1,10 +1,10 @@
-export interface Category {
+export interface CategoryType {
     id: string;
     name: string;
     description: string;
   }
   
-  export interface GroupProduct {
+  export interface GroupProductType {
     id: string;
     name: string;
     description: string;
@@ -12,7 +12,7 @@ export interface Category {
     imageUrl: string;
   }
   
-  interface Product {
+  export interface ProductType {
     id: string;
     name: string;
     description: string;
