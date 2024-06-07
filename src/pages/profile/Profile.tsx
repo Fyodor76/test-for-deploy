@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Input } from '../../ui/Input/Input';
 import profilePhoto from '../../assets/profile-photo.png'
 import { baseURL } from '../../const/baseUrl';
+import { LazyImage } from '../../components/lazyImage/LazyImage';
 
 interface UserProfile {
   firstName: string;
@@ -110,7 +111,7 @@ export const Profile: React.FC = () => {
             <Button size="large" background="base" color="basic">Сохранить изменения</Button>
           </form>
           <div className="profile-picture">
-            {<img src={preview.preview || profilePhoto} alt="Profile" />}
+            <LazyImage src={preview.preview || profilePhoto} alt="Profile" />
           </div>
         </div>
       </div>
