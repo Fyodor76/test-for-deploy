@@ -21,4 +21,13 @@
     margin: 0 auto;
     justify-content: center;
     }
+
+    @media (max-width: 768px) {
+        padding-top: 60px;
+
+        .main-header {
+            flex-wrap: wrap;
+            text-align: center;
+        }
+    }
 }
