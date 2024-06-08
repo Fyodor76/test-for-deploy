@@ -32,10 +32,11 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
       setLoading(true)
       const res = await AuthService.login(formData.login, formData.password, navigate);
       dispatch(login(res.user));
-      setLoading(false);
       showToast('success', 'Login successful!');
     } catch (error) {
       showToast('error', 'Error during login. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
