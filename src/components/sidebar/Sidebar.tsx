@@ -3,6 +3,7 @@ import { FC, useContext, useEffect, useState } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { ProductsContext } from '../../context/ProductContext';
 import { GroupProductType } from '../../types/ProductTypes';
+import { RxCross2 } from 'react-icons/rx';
 
 interface SidebarType {
   isOpen: boolean;
@@ -66,13 +67,14 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
     </div>
     {showSubtitles && (
       <div className="subtitles__container">
+        <RxCross2 className='icon-close' onClick={() => setShowSubtitles(false)}/>
         {subitems?.map((subitem, index) => (
           <div className='subtitles__content'>
             <div key={`${index}-subtitles`}>
             <span>{subitem.name}</span>
           </div>
           <div>
-          <ArrowForwardIcon fontSize="small" className="icon-arrow"/>
+            <ArrowForwardIcon fontSize="small" className="icon-arrow"/>
           </div>
           </div>
         ))}

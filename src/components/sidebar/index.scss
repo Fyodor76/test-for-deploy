@@ -14,7 +14,6 @@
    padding-right: 10px;
 
     .categories__container {
-      border: 1px solid gainsboro;
       display: flex;
       min-width: 240px;
       flex-direction: column;
@@ -64,11 +63,15 @@
     .subtitles__container {
       padding-top: 30px;
       width: 280px;
-      border-right: 1px solid gainsboro;
       display: flex;
       flex-direction: column;
       margin-top: 10px;
       height: 100%;
+
+      .icon-close {
+        font-size: 25px;
+        display: none;
+      }
 
       .subtitles__content {
         margin-left: 10px;
@@ -94,6 +97,19 @@
 
       & span {
         cursor: pointer;
+      }
+
+      @media (max-width: '768px') {
+        position: absolute;
+        background: white;
+        width: 240px;
+
+        .icon-close {
+          position: absolute;
+          display: block;
+          top: 0;
+          right: 10px;
+        }
       }
     }
   }
