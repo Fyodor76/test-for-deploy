@@ -18,7 +18,6 @@ import axiosInstance from '../../axios.config';
 import { showToast } from '../../const/toastConfig';
 import { RecommendationsService } from '../../api/Recommendations';
 import { motion } from 'framer-motion';
-import { height, minHeight } from '@mui/system';
 
 interface UserProfile {
   firstName: string;
