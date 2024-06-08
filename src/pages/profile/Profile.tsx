@@ -17,6 +17,8 @@ import { CategoryType, GroupProductType } from '../../types/ProductTypes';
 import axiosInstance from '../../axios.config';
 import { showToast } from '../../const/toastConfig';
 import { RecommendationsService } from '../../api/Recommendations';
+import { motion } from 'framer-motion';
+import { height, minHeight } from '@mui/system';
 
 interface UserProfile {
   firstName: string;
@@ -242,9 +244,11 @@ export const Profile: React.FC = () => {
               handleSelectAllGroups={handleSelectAllGroups}
             />
           ))}
-        <Button size="large" background="base" color="basic" onClick={handleSaveRecommendations}>
-          Выбрать категории
-        </Button>
+        <div className='save-button-block'>
+          <Button size="large" background="base" color="basic" onClick={handleSaveRecommendations}>
+            Сохранить выбранные категории
+          </Button>
+        </div>
       </div>
     );
   };
@@ -256,6 +260,24 @@ export const Profile: React.FC = () => {
     handleSelectedGroups: (categoryId: string, groupId: string) => void;
     handleSelectAllGroups: (categoryId: string) => void;
   }
+
+  const animationStyles = {
+    open: {
+      opacity: 1,
+      height: "auto"
+  },
+  close: {
+      opacity: 0,
+      height: 0
+  },
+  };
+  
+  const transition = {
+    type: 'tween',
+    ease: [0.45, 0, 0.55, 1],
+    duration: 0.25,
+  };
+  
   
   const RecommendationSelector: FC<RecommendationSelectorType> = ({
     category,
@@ -275,13 +297,22 @@ export const Profile: React.FC = () => {
 
       setIsGroupsOpened((prev) => !prev)
     }
+
+    const effect = {
+      initial: isGroupsOpened ? 'close' : 'open',
+      animate: 'open',
+      exit: 'close',
+      variants: animationStyles,
+      transition: transition,
+    };
   
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <div onClick={handleGroupsOpened}>
+      <div className='recommendation-selector'>
+        <div className='recommendation-selector-title' onClick={handleGroupsOpened}>
           <span style={{ fontSize: '25px' }}>{category.name}</span>
         </div>
-        {isGroupsOpened && (
+           <AnimatePresence initial={false}>
+            {isGroupsOpened && <motion.div {...effect} className='recommendation-groups'>
           <div>
             {groups.length > 0 && (
               <div>
@@ -294,7 +325,8 @@ export const Profile: React.FC = () => {
                 />
               </div>
             )}
-            {groups.map((group) => (
+           <div>
+           {groups.map((group) => (
               <div key={group.id}>
                 <span>{group.name}</span>
                 <Checkbox
@@ -305,8 +337,10 @@ export const Profile: React.FC = () => {
                 />
               </div>
             ))}
+           </div>
           </div>
-        )}
+          </motion.div>}
+          </AnimatePresence>
       </div>
     );
   };

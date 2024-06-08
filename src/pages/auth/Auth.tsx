@@ -5,6 +5,7 @@ import { AuthService } from "../../api/AuthService";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../const/toastConfig";
 import { AuthContext, login } from "../../context/AuthContext";
+import { Loader } from "../../components/loader/Loader";
 
 interface LoginProps {
   onSwitch: () => void;
@@ -12,6 +13,7 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ onSwitch }) => {
   const [formData, setFormData] = useState({ login: '', password: '' });
+  const [isLoading, setLoading] = useState<boolean>(false)
   const navigate = useNavigate();
   const {dispatch} = useContext(AuthContext)
 
@@ -27,8 +29,10 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
+      setLoading(true)
       const res = await AuthService.login(formData.login, formData.password, navigate);
-      dispatch(login(res.user))
+      dispatch(login(res.user));
+      setLoading(false);
       showToast('success', 'Login successful!');
     } catch (error) {
       showToast('error', 'Error during login. Please try again.');
@@ -64,7 +68,7 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
             size="large"
             background="base"
             color="basic"
-            disabled={formData.login.length === 0 || formData.password.length === 0}
+            disabled={formData.login.length === 0 || formData.password.length === 0 || isLoading}
           >
             Войти
           </Button>
@@ -73,6 +77,7 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
           <span onClick={onSwitch}>Нет аккаунта? Регистрация</span>
         </div>
       </div>
+      {isLoading && <Loader/>}
     </div>
   );
 };

@@ -100,3 +100,34 @@
       }
     }
   }
+
+
+  .recommendations-selector {
+     display: flex; 
+     flex-direction: column; 
+     gap: 20px;
+
+     .recommendation-groups {
+      padding: 0 10px 10px 15px;
+      margin-top: -10px;
+     }
+
+     .save-button-block {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .recommendation-selector {
+    border-bottom: 1px solid gainsboro;
+  }
+
+  .recommendation-selector-title {
+    padding: 0 14px 5px 20px;
+    height: 50px;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.5;
+    }
+  }

@@ -20,11 +20,13 @@
 }
 
 .modal-content {
-  padding: 5px 30px 20px;
   border-radius: 5px;
   background: #fff;
-  min-width: 350px;
+  min-width: 900px;
   min-height: auto;
+  max-height: 1000px;
+  overflow: auto;
+  padding: 15px 0;
   position: relative;
 }
 
@@ -37,9 +39,14 @@
   color: #262626;
 }
 
+@media (max-width: 1024px) {
+  .modal-content {
+    min-width: 500px;
+  }
+}
 
 @media (max-width: 768px) {
   .modal-content {
-    min-width: 280px;
+    min-width: 90%;
   }
 }
