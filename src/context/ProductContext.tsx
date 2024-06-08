@@ -48,7 +48,6 @@ export const ProductsContext = createContext<{
     const [state, dispatch] = useReducer(reducer, initialState);
   
     useEffect(() => {
-      if (authState.isAuth) {
         const fetchData = async () => {
           try {
             const [categoriesResponse, groupProductsResponse, productsResponse] = await Promise.all([
@@ -66,8 +65,7 @@ export const ProductsContext = createContext<{
         };
   
         fetchData();
-      }
-    }, [authState.isAuth]);
+    }, []);
   
     return (
       <ProductsContext.Provider value={{ state, dispatch }}>

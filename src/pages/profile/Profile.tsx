@@ -324,9 +324,9 @@ export const Profile: React.FC = () => {
                 />
               </div>
             )}
-           <div>
+           <div className='groups-container'>
            {groups.map((group) => (
-              <div key={group.id}>
+              <div key={group.id} className='checkbox-container'>
                 <span>{group.name}</span>
                 <Checkbox
                   size="small"
