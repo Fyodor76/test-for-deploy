@@ -118,7 +118,13 @@
 @media (max-width: 768px) {
   .header {
     .header__logo {
-      display: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      img {
+        width: 150px;
+      }
     }
   
     .header__input__container {
@@ -128,7 +134,8 @@
     .container {
       width: 90% !important;
       max-width: 90% !important;
-      justify-content: space-between;
+      gap: 10px;
+      justify-content: space-around;
       padding-left: 20px !important;
       padding-right: 0 !important;
 
@@ -142,6 +149,21 @@
           flex-wrap: wrap;
         }
       }
+    }
+  }
+}
+
+@media (max-width: 426px) {
+  .header {
+    .header__logo {
+      img {
+        width: 100px;
+      }
+    }
+
+    .container {
+      width: 100%;
+      padding-left: 5px !important;
     }
   }
 }
