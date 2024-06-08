@@ -1,9 +1,8 @@
-import React, { createContext, useReducer, useEffect, Dispatch, ReactNode, useContext } from 'react';
+import React, { createContext, useReducer, useEffect, Dispatch, ReactNode } from 'react';
 import { Categories } from '../api/Categories';
 import { GroupProducts } from '../api/Group-products';
 import { Products } from '../api/Products';
 import { CategoryType, GroupProductType, ProductType } from '../types/ProductTypes';
-import { AuthContext } from './AuthContext';
 
 interface State {
   categories: CategoryType[];
@@ -44,7 +43,6 @@ export const ProductsContext = createContext<{
   });
   
   export const ProductsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const { state: authState } = useContext(AuthContext);
     const [state, dispatch] = useReducer(reducer, initialState);
   
     useEffect(() => {
