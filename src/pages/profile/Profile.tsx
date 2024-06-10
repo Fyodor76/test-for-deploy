@@ -1,4 +1,4 @@
-import React, { useContext, useState, ChangeEvent, FormEvent, useEffect, FC } from 'react';
+import React, { useContext, useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { AuthContext, updateUser } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { AuthService } from '../../api/AuthService';
@@ -8,16 +8,11 @@ import { Input } from '../../ui/Input/Input';
 import profilePhoto from '../../assets/profile-photo.png'
 import { baseURL } from '../../const/baseUrl';
 import { LazyImage } from '../../components/lazyImage/LazyImage';
-import { Checkbox } from '../../ui/Checkbox/Checkbox';
-import { ProductsContext } from '../../context/ProductContext';
 import { useModal } from '../../hooks/Modal/useModal';
 import { Modal } from '../../components/Modal/Modal';
 import { AnimatePresence } from 'framer-motion';
-import { CategoryType, GroupProductType } from '../../types/ProductTypes';
-import axiosInstance from '../../axios.config';
-import { showToast } from '../../const/toastConfig';
-import { RecommendationsService } from '../../api/Recommendations';
-import { motion } from 'framer-motion';
+import { Recommendations } from './components/Recommendations';
+import { Loader } from '../../components/loader/Loader';
 
 interface UserProfile {
   firstName: string;
@@ -44,7 +39,12 @@ export const Profile: React.FC = () => {
       profilePicture: authState.user?.profilePicture || "",
     });
     const [preview, setPreview] = useState<PreviewType>({ preview: "", closeIcon: false });
-    const {openModal, closeModal, modalState} = useModal()
+    const {openModal, closeModal, modalState} = useModal();
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const handleLoading = () => {
+      setIsLoading((prev) => !prev)
+    }
 
     useEffect(() => {
       if (profile.profilePicture && typeof profile.profilePicture === 'string') {
@@ -81,6 +81,7 @@ export const Profile: React.FC = () => {
     const handleSave = async (e: FormEvent) => {
       e.preventDefault();
       try {
+        handleLoading()
         const formData = new FormData();
         formData.append('firstName', profile.firstName);
         formData.append('lastName', profile.lastName);
@@ -96,6 +97,8 @@ export const Profile: React.FC = () => {
         toast.success('Profile updated successfully');
       } catch (error) {
         toast.error('Failed to update profile');
+      } finally {
+        handleLoading()
       }
     };
   
@@ -137,7 +140,7 @@ export const Profile: React.FC = () => {
              size="large"
              background="base" 
              color="basic"
-             onClick={() => openModal(<Recommendations closeModal={closeModal}/>)}>
+             onClick={() => openModal(<Recommendations closeModal={closeModal} handleLoading={handleLoading}/>)}>
                 Выбрать категории
             </Button>
           </div>
@@ -145,201 +148,8 @@ export const Profile: React.FC = () => {
        <AnimatePresence initial={false}>
         {modalState.isOpen && <Modal closeModal={closeModal} template={modalState.template} show={modalState.isOpen}/>}
        </AnimatePresence>
-      </div>
-    );
-  };
-
-  interface RecommendationsType {
-    closeModal: () => void;
-  }
-
-  interface SelectedGroupsType {
-    categoryId: string;
-    groupIds: string[]
-  }
-
-  const Recommendations: FC<RecommendationsType> = ({ closeModal }) => {
-    const { state } = useContext(ProductsContext);
-    const { categories, groupProducts } = state;
-    const [selectedGroups, setSelectedGroups] = useState<SelectedGroupsType[]>([]);
-
-
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      try {
-        const response = await RecommendationsService.fetchRecommendations();
-        setSelectedGroups(response);
-      } catch (error) {
-        console.error('Error fetching recommendations:', error);
-      }
-    };
-
-    fetchRecommendations();
-  }, []);
-    
-    const handleSelectedGroups = (categoryId: string, groupId: string) => {
-      setSelectedGroups((prevSelectedGroups) => {
-        const categoryIndex = prevSelectedGroups.findIndex((sGr) => sGr.categoryId === categoryId);
-        if (categoryIndex === -1) {
-          return [...prevSelectedGroups, { categoryId, groupIds: [groupId] }];
-        }
-        const category = prevSelectedGroups[categoryIndex];
-        const isGroupSelected = category.groupIds.includes(groupId);
-        const updatedGroupIds = isGroupSelected
-          ? category.groupIds.filter((id) => id !== groupId)
-          : [...category.groupIds, groupId];
-        const updatedCategories = [...prevSelectedGroups];
-        updatedCategories[categoryIndex] = { ...category, groupIds: updatedGroupIds };
-        return updatedCategories;
-      });
-    };
-  
-    const handleSelectAllGroups = (categoryId: string) => {
-      setSelectedGroups((prevSelectedGroups) => {
-        const categoryGroups = groupProducts.filter((group) => group.categoryId === categoryId).map((group) => group.id);
-        const categoryIndex = prevSelectedGroups.findIndex((sGr) => sGr.categoryId === categoryId);
-        if (categoryIndex === -1) {
-          return [...prevSelectedGroups, { categoryId, groupIds: categoryGroups }];
-        }
-        const category = prevSelectedGroups[categoryIndex];
-        const isAllSelected = category.groupIds.length === categoryGroups.length;
-        const updatedGroupIds = isAllSelected ? [] : categoryGroups;
-        const updatedCategories = [...prevSelectedGroups];
-        updatedCategories[categoryIndex] = { ...category, groupIds: updatedGroupIds };
-        return updatedCategories;
-      });
-    };
-
-    const handleSaveRecommendations = async () => {
-      try {
-        await Promise.all(
-          selectedGroups.flatMap((category) =>
-            category.groupIds.map((groupProductId) =>
-              axiosInstance.post('/api/recommendation', {
-                categoryId: category.categoryId,
-                groupProductId,
-              })
-            )
-          )
-        );
-        showToast('success', 'Recommendations saved successfully');
-        closeModal();
-      } catch (error) {
-        console.error('Error saving recommendations:', error);
-        showToast('error', 'Recommendations saved successfully');
-      }
-    };
-  
-    return (
-      <div className="recommendations-selector">
-        {categories.length > 0 &&
-          categories.map((category) => (
-            <RecommendationSelector
-              key={category.id}
-              category={category}
-              groups={groupProducts.filter((group) => group.categoryId === category.id)}
-              selectedGroups={selectedGroups}
-              handleSelectedGroups={handleSelectedGroups}
-              handleSelectAllGroups={handleSelectAllGroups}
-            />
-          ))}
-        <div className='save-button-block'>
-          <Button size="large" background="base" color="basic" onClick={handleSaveRecommendations}>
-            Сохранить выбранные категории
-          </Button>
-        </div>
+       {isLoading && <Loader/>}
       </div>
     );
   };
   
-  interface RecommendationSelectorType {
-    category: CategoryType;
-    groups: GroupProductType[];
-    selectedGroups: SelectedGroupsType[];
-    handleSelectedGroups: (categoryId: string, groupId: string) => void;
-    handleSelectAllGroups: (categoryId: string) => void;
-  }
-
-  const animationStyles = {
-    open: {
-      opacity: 1,
-      height: "auto"
-  },
-  close: {
-      opacity: 0,
-      height: 0
-  },
-  };
-  
-  const transition = {
-    type: 'tween',
-    ease: [0.45, 0, 0.55, 1],
-    duration: 0.25,
-  };
-  
-  
-  const RecommendationSelector: FC<RecommendationSelectorType> = ({
-    category,
-    groups,
-    selectedGroups,
-    handleSelectedGroups,
-    handleSelectAllGroups,
-  }) => {
-    const [isGroupsOpened, setIsGroupsOpened] = useState<boolean>(false);
-  
-    const selectedCategory = selectedGroups.some((sGr) => sGr.categoryId === category.id);
-    const hasSelectedGroup = (groupId: string): boolean =>
-      selectedGroups.find((sGr) => sGr.categoryId === category.id)?.groupIds.includes(groupId) || false;
-
-    const handleGroupsOpened = () => {
-      if (!groups.length) return;
-
-      setIsGroupsOpened((prev) => !prev)
-    }
-
-    const effect = {
-      initial: isGroupsOpened ? 'close' : 'open',
-      animate: 'open',
-      exit: 'close',
-      variants: animationStyles,
-      transition: transition,
-    };
-  
-    return (
-      <div className='recommendation-selector'>
-        <div className='recommendation-selector-title' onClick={handleGroupsOpened}>
-          <span style={{ fontSize: '25px' }}>{category.name}</span>
-        </div>
-           <AnimatePresence initial={false}>
-            {isGroupsOpened && <motion.div {...effect} className='recommendation-groups'>
-          <div>
-            {groups.length > 0 && (
-              <div>
-                <Checkbox
-                  size="small"
-                  color="base"
-                  checked={selectedCategory && groups.every((group) => hasSelectedGroup(group.id))}
-                  onChange={() => handleSelectAllGroups(category.id)}
-                  label="Выбрать все группы"
-                />
-              </div>
-            )}
-           <div className='groups-container'>
-           {groups.map((group) => (
-              <div key={group.id} className='checkbox-container'>
-                <span>{group.name}</span>
-                <Checkbox
-                  size="small"
-                  color="base"
-                  checked={hasSelectedGroup(group.id)}
-                  onChange={() => handleSelectedGroups(category.id, group.id)}
-                />
-              </div>
-            ))}
-           </div>
-          </div>
-          </motion.div>}
-          </AnimatePresence>
-      </div>
-    );
-  };
