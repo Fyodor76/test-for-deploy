@@ -59,14 +59,18 @@ const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string)
           handleLoading()
           const results = await Products.searchProducts({ query, group });
           dispatch({ type: 'SET_PRODUCTS', payload: results });
+          showToast("success", "Товары успешно найдены!")
         } catch (error) {
           console.error('Error fetching search results:', error);
+          showToast("success", "Возникла ошибка при получении товаров!")
         } finally {
           handleLoading()
         }
       };
   
-      fetchProducts();
+      if (query || group) {
+        fetchProducts();
+      }
     }, [params]);
 
     return (

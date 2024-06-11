@@ -39,7 +39,7 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
       const productsByRecommendations = await Products.fetchProductsByRecommendations() 
       if (productsByRecommendations.length) {
         console.log(productsByRecommendations, 'productBuRec')
-        dispatchProducts(productsByRecommendations)
+        dispatchProducts({ type: 'SET_PRODUCTS', payload: productsByRecommendations })
         showToast("success", "Подобрали вам продукты по вашим рекомендациям!")
       }
     } catch (error) {

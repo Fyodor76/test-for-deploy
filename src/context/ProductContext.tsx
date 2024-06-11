@@ -59,14 +59,17 @@ import { showToast } from '../const/toastConfig';
           dispatch({ type: 'SET_CATEGORIES', payload: categoriesResponse });
           dispatch({ type: 'SET_GROUP_PRODUCTS', payload: groupProductsResponse });
   
-          if (productsBeRecResponse.length) {
-            dispatch({ type: 'SET_PRODUCTS', payload: productsBeRecResponse });
-            showToast("success", "Подобрали вам товары по вашим рекомендациям!")
-          } else {
-            const productsResponse = await Products.fetchProducts();
-            dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
-            showToast("success", "Товары успешно загружены!")
-          }
+          // if (productsBeRecResponse.length) {
+          //   dispatch({ type: 'SET_PRODUCTS', payload: productsBeRecResponse });
+          //   showToast("success", "Подобрали вам товары по вашим рекомендациям!")
+          // } else {
+          //   const productsResponse = await Products.fetchProducts();
+          //   dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
+          //   showToast("success", "Товары успешно загружены!")
+          // }
+          const productsResponse = await Products.fetchProducts();
+          dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
+          showToast("success", "Товары успешно загружены!")
         } catch (error) {
           console.error('Error fetching data:', error);
         }
