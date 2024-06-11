@@ -7,17 +7,25 @@ import { toastConfig } from './const/toastConfig.ts';
 import './index.scss';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { ProductsProvider } from './context/ProductContext.tsx';
+import { useState } from 'react';
+import { Loader } from './components/loader/Loader.tsx';
   
 
 function App() {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  console.log(isLoading)
+  const handleLoading = () => {
+    setIsLoading((prev) => !prev)
+  }
   return (
     <AuthProvider>
       <ProductsProvider>
         <div className="app-container">
-          <Header />
+          <Header handleLoading={handleLoading}/>
           <Router />
           <Footer />
           <ToastContainer {...toastConfig} />
+          {isLoading && <Loader/>}
         </div>
       </ProductsProvider>
     </AuthProvider>

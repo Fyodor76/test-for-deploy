@@ -21,6 +21,7 @@
     "framer-motion": "^11.2.10",
     "hamburger-react": "^2.5.0",
     "json-server": "^0.17.0",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.2",
@@ -30,6 +31,7 @@
     "styled-components": "^6.1.8"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.5",
     "@types/node": "^20.14.2",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",

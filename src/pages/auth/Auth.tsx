@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { showToast } from "../../const/toastConfig";
 import { AuthContext, login } from "../../context/AuthContext";
 import { Loader } from "../../components/loader/Loader";
+import { Products } from "../../api/Products";
+import { ProductsContext } from "../../context/ProductContext";
 
 interface LoginProps {
   onSwitch: () => void;
@@ -16,6 +18,7 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
   const [isLoading, setLoading] = useState<boolean>(false)
   const navigate = useNavigate();
   const {dispatch} = useContext(AuthContext)
+  const {dispatch: dispatchProducts} = useContext(ProductsContext)
 
   const clearInput = (name: string) => {
     setFormData(prevState => ({ ...prevState, [name]: '' }));
@@ -33,6 +36,12 @@ const Login: React.FC<LoginProps> = ({ onSwitch }) => {
       const res = await AuthService.login(formData.login, formData.password, navigate);
       dispatch(login(res.user));
       showToast('success', 'Login successful!');
+      const productsByRecommendations = await Products.fetchProductsByRecommendations() 
+      if (productsByRecommendations.length) {
+        console.log(productsByRecommendations, 'productBuRec')
+        dispatchProducts(productsByRecommendations)
+        showToast("success", "Подобрали вам продукты по вашим рекомендациям!")
+      }
     } catch (error) {
       showToast('error', 'Error during login. Please try again.');
     } finally {
