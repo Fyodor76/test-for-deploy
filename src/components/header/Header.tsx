@@ -6,7 +6,7 @@ import logo from '../../assets/logo.svg';
 import { Sidebar } from '../sidebar/Sidebar.tsx';
 import { Input } from '../../ui/Input/Input.tsx';
 import './index.scss';
-import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Button} from "../../ui/Button/Button.tsx";
 import { AuthContext, logoutAction } from '../../context/AuthContext.tsx';
 import { AuthService } from '../../api/AuthService.ts';
@@ -14,13 +14,14 @@ import { showToast } from '../../const/toastConfig.ts';
 import { ProductsContext } from '../../context/ProductContext.tsx';
 import debounce from 'lodash/debounce';
 import { Products } from '../../api/Products.ts';
+import { useUrlParams } from '../../context/UrlParamContext.tsx';
 
 interface HeaderType {
   handleLoading: () => void;
 }
 
-const debouncedUpdateUrl = debounce((updateUrl: (queryParams: { query?: string; group?: string }) => void, query: string) => {
-  updateUrl({ query });
+const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string) => void, query: string, value: string) => {
+  updateParam(query, value);
 }, 1000);
 
   export const Header: FC<HeaderType> = ({handleLoading}) => {
@@ -28,7 +29,7 @@ const debouncedUpdateUrl = debounce((updateUrl: (queryParams: { query?: string; 
     const [value, setValue] = useState<string>('');
     const { state: authContext, dispatch: dispatchAuth } = useContext(AuthContext);
     const {dispatch } = useContext(ProductsContext);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const { params, updateParam } = useUrlParams();
     const navigate = useNavigate();
   
     const logout = async () => {
@@ -38,54 +39,35 @@ const debouncedUpdateUrl = debounce((updateUrl: (queryParams: { query?: string; 
       showToast("success", "Вы вышли из аккаунта");
     };
   
-    const updateUrl = (queryParams: { query?: string; group?: string }) => {
-      const params = new URLSearchParams(searchParams);
-  
-      if (queryParams.query !== undefined) {
-        if (queryParams.query) {
-          params.set('query', queryParams.query);
-        } else {
-          params.delete('query');
-        }
-      }
-  
-      if (queryParams.group !== undefined) {
-        if (queryParams.group) {
-          params.set('group', queryParams.group);
-        } else {
-          params.delete('group');
-        }
-      }
-  
-      setSearchParams(params);
-    };
-  
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setValue(value);
-      debouncedUpdateUrl(updateUrl, value);
+      debouncedUpdateUrl(updateParam, 'query', value)
     };
   
     const clearInput = () => {
       setValue('');
-      updateUrl({ query: '' });
+      updateParam('query', '');
     };
   
     useEffect(() => {
-      const query = searchParams.get('query') || "";
-      const group = searchParams.get('group') || "";
+      const query = params.get('query') || "";
+      const group = params.get('group') || "";
   
       const fetchProducts = async () => {
         try {
+          handleLoading()
           const results = await Products.searchProducts({ query, group });
           dispatch({ type: 'SET_PRODUCTS', payload: results });
         } catch (error) {
           console.error('Error fetching search results:', error);
+        } finally {
+          handleLoading()
         }
       };
   
       fetchProducts();
-    }, [searchParams, dispatch]);
+    }, [params]);
 
     return (
       <header className="header">

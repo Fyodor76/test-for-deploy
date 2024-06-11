@@ -4,6 +4,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { ProductsContext } from '../../context/ProductContext';
 import { GroupProductType } from '../../types/ProductTypes';
 import { RxCross2 } from 'react-icons/rx';
+import { useUrlParams } from '../../context/UrlParamContext';
 
 interface SidebarType {
   isOpen: boolean;
@@ -14,12 +15,19 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
   const [subitems, setSubitems] = useState<GroupProductType[]>([]);
   const { state: {categories, groupProducts} } = useContext(ProductsContext);
   const [showSubtitles, setShowSubtitles] = useState<boolean>(false);
-  const [activeItem, setActiveItem] = useState<string>("")
+  const [activeItem, setActiveItem] = useState<string>("");
+  const { updateParam } = useUrlParams();
+
  // const {dispatch} = useContext(ProductsContext)
 
   const setCategory = (v: string) => {
     console.log(v)
    // dispatch(filterProducts(v));
+  }
+
+
+  const handleGroupParams = (id: string) => {
+    updateParam('group', id)
   }
 
 
@@ -69,7 +77,7 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
       <div className="subtitles__container">
         <RxCross2 className='icon-close' onClick={() => setShowSubtitles(false)}/>
         {subitems?.map((subitem, index) => (
-          <div className='subtitles__content'>
+          <div className='subtitles__content' onClick={() => handleGroupParams(subitem.id)} key={subitem.id}>
             <div key={`${index}-subtitles`}>
             <span>{subitem.name}</span>
           </div>

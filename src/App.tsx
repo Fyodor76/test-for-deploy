@@ -9,6 +9,7 @@ import { AuthProvider } from './context/AuthContext.tsx';
 import { ProductsProvider } from './context/ProductContext.tsx';
 import { useState } from 'react';
 import { Loader } from './components/loader/Loader.tsx';
+import { UrlParamsProvider } from './context/UrlParamContext.tsx';
   
 
 function App() {
@@ -17,16 +18,19 @@ function App() {
   const handleLoading = () => {
     setIsLoading((prev) => !prev)
   }
+  
   return (
     <AuthProvider>
       <ProductsProvider>
-        <div className="app-container">
-          <Header handleLoading={handleLoading}/>
-          <Router />
-          <Footer />
-          <ToastContainer {...toastConfig} />
-          {isLoading && <Loader/>}
-        </div>
+        <UrlParamsProvider>
+          <div className="app-container">
+            <Header handleLoading={handleLoading}/>
+            <Router />
+            <Footer />
+            <ToastContainer {...toastConfig} />
+            {isLoading && <Loader/>}
+          </div>
+        </UrlParamsProvider>
       </ProductsProvider>
     </AuthProvider>
   );
