@@ -50,7 +50,7 @@ import { showToast } from '../const/toastConfig';
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const [categoriesResponse, groupProductsResponse, productsBeRecResponse] = await Promise.all([
+          const [categoriesResponse, groupProductsResponse] = await Promise.all([
             Categories.fetchCategories(),
             GroupProducts.fetchGroupProducts(),
             Products.fetchProductsByRecommendations()
