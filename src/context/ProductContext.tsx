@@ -68,6 +68,7 @@ import { showToast } from '../const/toastConfig';
           //   showToast("success", "Товары успешно загружены!")
           // }
           const productsResponse = await Products.fetchProducts();
+          console.log(productsResponse, 'productResponse test')
           dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
           showToast("success", "Товары успешно загружены!")
         } catch (error) {
