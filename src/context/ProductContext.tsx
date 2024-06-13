@@ -50,10 +50,10 @@ import { showToast } from '../const/toastConfig';
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const [categoriesResponse, groupProductsResponse] = await Promise.all([
+          const [categoriesResponse, groupProductsResponse, productsResponse] = await Promise.all([
             Categories.fetchCategories(),
             GroupProducts.fetchGroupProducts(),
-            Products.fetchProductsByRecommendations()
+            Products.fetchProducts()
           ]);
   
           dispatch({ type: 'SET_CATEGORIES', payload: categoriesResponse });
@@ -67,8 +67,6 @@ import { showToast } from '../const/toastConfig';
           //   dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
           //   showToast("success", "Товары успешно загружены!")
           // }
-          const productsResponse = await Products.fetchProducts();
-          console.log(productsResponse, 'productResponse test')
           dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
           showToast("success", "Товары успешно загружены!")
         } catch (error) {
