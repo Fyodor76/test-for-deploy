@@ -18,6 +18,8 @@ export interface CategoryType {
     description: string;
     categoryId: string;
     groupProductId: string;
+    commentsNumber: number;
+    rate: number;
     imageUrl: string;
     price: number;
   }
