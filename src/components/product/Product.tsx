@@ -15,17 +15,17 @@ import { AuthContext } from "../../context/AuthContext";
 
 export const Product: FC<{ product: ProductType }> = ({ product }) => {
   const { openModal, closeModal, modalState } = useModal();
-  const {state: authContext} = useContext(AuthContext)
-  const { basketRef } = useCart();
+  const { state: authContext } = useContext(AuthContext);
+  const { basketRef, addItem } = useCart();
   const [isAnimating, setIsAnimating] = useState(false);
   const [startPosition, setStartPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const imageRef = useRef<HTMLImageElement>(null);
-  const {addItem} = useCart()
 
   const handleAddToCart = async () => {
     if (!authContext.isAuth) {
-      showToast('error', 'Необходимо авторизоваться!')
+      showToast('error', 'Необходимо авторизоваться!');
+      return;
     }
 
     if (imageRef.current && basketRef.current) {
@@ -40,7 +40,7 @@ export const Product: FC<{ product: ProductType }> = ({ product }) => {
       setTimeout(() => setIsAnimating(true), 10); // Перезапустить анимацию с новыми координатами
     }
 
-    await addItem({price: product.price, quantity: 1, productId: product.id})
+    await addItem({ price: product.price, quantity: 1, productId: product.id });
   };
 
   return (
