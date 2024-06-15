@@ -4,6 +4,7 @@ import { GroupProducts } from '../api/Group-products';
 import { Products } from '../api/Products';
 import { CategoryType, GroupProductType, ProductType } from '../types/ProductTypes';
 import { showToast } from '../const/toastConfig';
+import { useUrlParams } from './UrlParamContext';
 
 
   interface State {
@@ -46,7 +47,8 @@ import { showToast } from '../const/toastConfig';
   
   export const ProductsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-  
+    const { params } = useUrlParams();
+
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -58,17 +60,8 @@ import { showToast } from '../const/toastConfig';
   
           dispatch({ type: 'SET_CATEGORIES', payload: categoriesResponse });
           dispatch({ type: 'SET_GROUP_PRODUCTS', payload: groupProductsResponse });
-  
-          // if (productsBeRecResponse.length) {
-          //   dispatch({ type: 'SET_PRODUCTS', payload: productsBeRecResponse });
-          //   showToast("success", "Подобрали вам товары по вашим рекомендациям!")
-          // } else {
-          //   const productsResponse = await Products.fetchProducts();
-          //   dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
-          //   showToast("success", "Товары успешно загружены!")
-          // }
           dispatch({ type: 'SET_PRODUCTS', payload: productsResponse });
-          showToast("success", "Товары успешно загружены!")
+
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -76,6 +69,30 @@ import { showToast } from '../const/toastConfig';
   
       fetchData();
     }, []);
+
+    useEffect(() => {
+      const query = params.get('query') || "";
+      const group = params.get('group') || "";
+  
+      const fetchProducts = async () => {
+        try {
+          if (!params.size) {
+            const results = await Products.fetchProducts();
+            dispatch({ type: 'SET_PRODUCTS', payload: results });
+          } else {
+            const results = await Products.searchProducts({ query, group });
+            dispatch({ type: 'SET_PRODUCTS', payload: results });
+          }
+          
+          showToast("success", "Товары успешно найдены!")
+        } catch (error) {
+          console.error('Error fetching search results:', error);
+          showToast("success", "Возникла ошибка при получении товаров!")
+        }
+      };
+  
+        fetchProducts();
+    }, [params]);
   
     return (
       <ProductsContext.Provider value={{ state, dispatch }}>

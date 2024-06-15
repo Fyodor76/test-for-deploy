@@ -11,9 +11,7 @@ import {Button} from "../../ui/Button/Button.tsx";
 import { AuthContext, logoutAction } from '../../context/AuthContext.tsx';
 import { AuthService } from '../../api/AuthService.ts';
 import { showToast } from '../../const/toastConfig.ts';
-import { ProductsContext } from '../../context/ProductContext.tsx';
 import debounce from 'lodash/debounce';
-import { Products } from '../../api/Products.ts';
 import { useUrlParams } from '../../context/UrlParamContext.tsx';
 
 interface HeaderType {
@@ -26,11 +24,10 @@ const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string)
   updateParam(query, value);
 }, 1000);
 
-  export const Header: FC<HeaderType> = ({handleLoading, handleOpenSidebar, isSidebarOpen}) => {
+  export const Header: FC<HeaderType> = ({ handleOpenSidebar, isSidebarOpen}) => {
     const [value, setValue] = useState<string>('');
     const { state: authContext, dispatch: dispatchAuth } = useContext(AuthContext);
-    const {dispatch } = useContext(ProductsContext);
-    const { params, updateParam } = useUrlParams();
+    const { updateParam } = useUrlParams();
     const navigate = useNavigate();
   
     const logout = async () => {
@@ -50,29 +47,6 @@ const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string)
       setValue('');
       updateParam('query', '');
     };
-  
-    useEffect(() => {
-      const query = params.get('query') || "";
-      const group = params.get('group') || "";
-  
-      const fetchProducts = async () => {
-        try {
-          handleLoading()
-          const results = await Products.searchProducts({ query, group });
-          dispatch({ type: 'SET_PRODUCTS', payload: results });
-          showToast("success", "Товары успешно найдены!")
-        } catch (error) {
-          console.error('Error fetching search results:', error);
-          showToast("success", "Возникла ошибка при получении товаров!")
-        } finally {
-          handleLoading()
-        }
-      };
-  
-      if (query || group) {
-        fetchProducts();
-      }
-    }, [params]);
 
     return (
       <header className="header" onClick={(e) => e.stopPropagation()}>

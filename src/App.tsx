@@ -29,17 +29,17 @@ function App() {
   
   return (
     <AuthProvider>
-      <ProductsProvider>
-        <UrlParamsProvider>
-          <div className="app-container" onClick={() => setSidebarOpen(false)}>
-            <Header handleLoading={handleLoading} isSidebarOpen={isSidebarOpen} handleOpenSidebar={handleOpenSidebar}/>
-            <Router />
-            <Footer />
-            <ToastContainer {...toastConfig} />
-            {isLoading && <Loader/>}
-          </div>
-        </UrlParamsProvider>
-      </ProductsProvider>
+      <UrlParamsProvider>
+        <ProductsProvider>
+            <div className="app-container" onClick={() => setSidebarOpen(false)}>
+              <Header handleLoading={handleLoading} isSidebarOpen={isSidebarOpen} handleOpenSidebar={handleOpenSidebar}/>
+              <Router />
+              <Footer />
+              <ToastContainer {...toastConfig} />
+              {isLoading && <Loader/>}
+            </div>
+        </ProductsProvider>
+      </UrlParamsProvider>
     </AuthProvider>
   );
 }
