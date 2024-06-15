@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useContext, useRef, useState } from "react";
 import { ProductType } from "../../types/ProductTypes";
 import { LazyImage } from "../lazyImage/LazyImage";
 import { baseURL } from "../../const/baseUrl";
@@ -9,17 +9,26 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Modal } from "../Modal/Modal";
 import { CommentsModal } from "../commentsModal/CommentsModal";
 import { useCart } from "../../context/CartContext";
+import { CartService } from "../../api/CartService";
+import { showToast } from "../../const/toastConfig";
+import { AuthContext } from "../../context/AuthContext";
 
 
 export const Product: FC<{ product: ProductType }> = ({ product }) => {
   const { openModal, closeModal, modalState } = useModal();
+  const {state: authContext} = useContext(AuthContext)
   const { basketRef } = useCart();
   const [isAnimating, setIsAnimating] = useState(false);
   const [startPosition, setStartPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const imageRef = useRef<HTMLImageElement>(null);
+  const {addItem} = useCart()
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    if (!authContext.isAuth) {
+      showToast('error', 'Необходимо авторизоваться!')
+    }
+
     if (imageRef.current && basketRef.current) {
       const imageRect = imageRef.current.getBoundingClientRect();
       const basketRect = basketRef.current.getBoundingClientRect();
@@ -31,6 +40,9 @@ export const Product: FC<{ product: ProductType }> = ({ product }) => {
       setIsAnimating(false); // Сбросить состояние анимации
       setTimeout(() => setIsAnimating(true), 10); // Перезапустить анимацию с новыми координатами
     }
+
+    await addItem({price: product.price, quantity: 1, productId: product.id})
+    showToast('success', 'Товар успешно добавлен в корзину!')
   };
 
   return (

@@ -105,12 +105,22 @@ export const Header = forwardRef<HTMLDivElement, HeaderType>(({ handleOpenSideba
                 </div>
               </div>
             </Link>
-            <div className="header__icon shopping-basket-test" ref={basketRef}>
+            <Link to="./wb-front/cart">
+            <div
+             className="header__icon shopping-basket-test"
+              ref={basketRef} 
+              onClick={() =>{
+                if (!authContext.isAuth) {
+                  showToast("error", "Необходимо авторизоваться")
+                  return;
+                }
+              }}>
               <ShoppingBasketIcon />
               <div className="header__icon__text">
-                Корзина
+                  Корзина
               </div>
             </div>
+            </Link>
           </div>
         </div>
       </header>

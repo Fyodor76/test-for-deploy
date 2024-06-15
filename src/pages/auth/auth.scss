@@ -3,7 +3,9 @@
   display: flex;
   justify-content: center;
   min-height: 300px;
-  margin: auto auto;
+  margin: 0 auto;
+  margin-top: 100px;
+
 
   .switch {
     margin-top: 20px;
@@ -39,7 +41,6 @@
 
   @media (max-width: 768px) {
       width: 90%;
-      margin-top: 100px;
   }
 }
 
