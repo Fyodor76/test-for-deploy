@@ -4,14 +4,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
 import { baseURL } from '../../const/baseUrl';
 import { Checkbox } from '../../ui/Checkbox/Checkbox';
+import { Loader } from '../../components/loader/Loader';
 
 export const Cart = () => {
   const { items, removeItem, updateItemQuantity, fetchCartItems } = useCart();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchCartItems();
+  useEffect( () => {
+      (async () => {
+      setLoading(true)
+      await fetchCartItems();
+      setLoading(false)
+    })();
   }, []);
 
   useEffect(() => {
@@ -50,7 +56,7 @@ export const Cart = () => {
   };
 
   return (
-    <motion.div
+    !loading ? <motion.div
       className="cart"
       
     >
@@ -118,6 +124,6 @@ export const Cart = () => {
           </div>
         </>
       )}
-    </motion.div>
+    </motion.div> : <Loader/>
   );
 };

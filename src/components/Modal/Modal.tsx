@@ -1,4 +1,5 @@
 import { FC, useEffect, ReactElement } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { RxCross2 } from 'react-icons/rx';
 
@@ -10,9 +11,11 @@ interface ModalType {
 
 const animationStyles = {
   open: {
+    background: "rgba(0, 0, 0, 0.2)",
     opacity: 1,
   },
   close: {
+    background: "rgba(0, 0, 0, 0)",
     opacity: 0,
   },
 };
@@ -46,7 +49,7 @@ export const Modal: FC<ModalType> = ({ closeModal, template, show }) => {
     transition: transition,
   };
 
-  return (
+  return createPortal(
     <motion.div {...effect} className="modal">
       <div className="modal-wrapper">
         <div className="modal-content">
@@ -59,6 +62,7 @@ export const Modal: FC<ModalType> = ({ closeModal, template, show }) => {
       <div className="big-close-button" onClick={closeModal}>
         <RxCross2 />
       </div>
-    </motion.div>
+    </motion.div>,
+    document.getElementById('modal') as HTMLElement
   );
 };
