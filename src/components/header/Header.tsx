@@ -18,14 +18,15 @@ import { useUrlParams } from '../../context/UrlParamContext.tsx';
 
 interface HeaderType {
   handleLoading: () => void;
+  handleOpenSidebar: () => void;
+  isSidebarOpen: boolean;
 }
 
 const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string) => void, query: string, value: string) => {
   updateParam(query, value);
 }, 1000);
 
-  export const Header: FC<HeaderType> = ({handleLoading}) => {
-    const [isOpen, setOpen] = useState(false);
+  export const Header: FC<HeaderType> = ({handleLoading, handleOpenSidebar, isSidebarOpen}) => {
     const [value, setValue] = useState<string>('');
     const { state: authContext, dispatch: dispatchAuth } = useContext(AuthContext);
     const {dispatch } = useContext(ProductsContext);
@@ -74,16 +75,16 @@ const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string)
     }, [params]);
 
     return (
-      <header className="header">
+      <header className="header" onClick={(e) => e.stopPropagation()}>
         <div className="container">
-          <Sidebar isOpen={isOpen} />
+          <Sidebar isOpen={isSidebarOpen} />
           <Link className="header__logo" to="./wb-front">
             <img src={logo} alt="logo" />
           </Link>
           <div className="header__hamburger">
             <Hamburger
-              toggled={isOpen}
-              toggle={setOpen}
+              toggled={isSidebarOpen}
+              toggle={() => handleOpenSidebar()}
               size={25}
               color="white"
             />

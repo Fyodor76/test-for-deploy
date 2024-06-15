@@ -12,6 +12,38 @@ import { CommentsModal } from "../commentsModal/CommentsModal";
 export const Product: FC<{ product: ProductType }> = ({product}) => {
     const {openModal, closeModal, modalState} = useModal();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const addProduct = (e: any) => {
+        const cart = document.querySelector(".header__icon");
+    
+        const productBlock = e.target.closest(".product"); // блок товара, на который кликнули
+        const productCoordinates = productBlock.getBoundingClientRect(); // координаты блока товара
+        console.log(productCoordinates, 'prCoord')
+        const cartCoordinates = cart?.getBoundingClientRect(); // координаты корзины
+    
+        const clonedProduct = productBlock.cloneNode(true); // копия блока товара
+        clonedProduct.style.position = "absolute";
+        clonedProduct.style.left = productCoordinates.left - 300 + "px";
+        clonedProduct.style.top = productCoordinates.top - 100 + "px";
+        
+        clonedProduct.style.opacity = "0.5";
+        clonedProduct.style.transition = "all 1s ease-in-out";
+    
+        document.body.appendChild(clonedProduct); // добавляем копию на страницу
+    
+        // Анимация перемещения товара к корзине
+        setTimeout(() => {
+          clonedProduct.style.left = cartCoordinates?.left + "px";
+          clonedProduct.style.top = cartCoordinates?.top + "px";
+        }, 100);
+    
+        // Удаление копии товара после завершения анимации
+        setTimeout(() => {
+          document.body.removeChild(clonedProduct);
+        }, 2000);
+      };
+    
+
     return (
         <div className="product">
            <LazyImage src={`${baseURL}${product.imageUrl}`} alt=""/>
@@ -30,7 +62,7 @@ export const Product: FC<{ product: ProductType }> = ({product}) => {
                     <span>{getCommentLabel(product.commentsNumber)}</span>
                 </div>
            </div>
-           <Button size='medium' color='basic' background='base' onClick={() => {}}>       
+           <Button size='medium' color='basic' background='base' onClick={addProduct}>       
                 <span>В корзину</span>
             </Button>
         <AnimatePresence initial={false}>

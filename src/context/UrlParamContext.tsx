@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 interface UrlParamsContextType {
   params: URLSearchParams;
   updateParam: (key: string, value: string) => void;
+  resetParams: () => void;
 }
 
 export const UrlParamsContext = createContext<UrlParamsContextType | undefined>(undefined);
@@ -26,8 +27,14 @@ export const UrlParamsProvider: FC<{ children: ReactNode }> = ({ children }) => 
     setSearchParams(newParams);
   };
 
+  const resetParams = () => {
+    const newParams = new URLSearchParams(params);
+    Array.from(newParams.keys()).forEach(key => newParams.delete(key));
+    setSearchParams(newParams);
+  };
+
   return (
-    <UrlParamsContext.Provider value={{ params, updateParam }}>
+    <UrlParamsContext.Provider value={{ params, updateParam, resetParams }}>
       {children}
     </UrlParamsContext.Provider>
   );

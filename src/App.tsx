@@ -13,18 +13,26 @@ import { UrlParamsProvider } from './context/UrlParamContext.tsx';
   
 
 function App() {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  console.log(isLoading)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   const handleLoading = () => {
     setIsLoading((prev) => !prev)
   }
+
+  const handleOpenSidebar = () => {
+    console.log('dsadasd')
+    setSidebarOpen((prev) => !prev)
+  }
+
+  
   
   return (
     <AuthProvider>
       <ProductsProvider>
         <UrlParamsProvider>
-          <div className="app-container">
-            <Header handleLoading={handleLoading}/>
+          <div className="app-container" onClick={() => setSidebarOpen(false)}>
+            <Header handleLoading={handleLoading} isSidebarOpen={isSidebarOpen} handleOpenSidebar={handleOpenSidebar}/>
             <Router />
             <Footer />
             <ToastContainer {...toastConfig} />
