@@ -41,7 +41,6 @@ export const Product: FC<{ product: ProductType }> = ({ product }) => {
     }
 
     await addItem({price: product.price, quantity: 1, productId: product.id})
-    showToast('success', 'Товар успешно добавлен в корзину!')
   };
 
   return (
