@@ -1,7 +1,7 @@
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import Hamburger from 'hamburger-react';
-import { useState, ChangeEvent, useContext, FC, forwardRef } from 'react';
+import { useState, ChangeEvent, useContext, forwardRef } from 'react';
 import logo from '../../assets/logo.svg';
 import { Sidebar } from '../sidebar/Sidebar.tsx';
 import { Input } from '../../ui/Input/Input.tsx';
@@ -25,7 +25,7 @@ const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string)
   updateParam(query, value);
 }, 1000);
 
-export const Header = forwardRef<HTMLDivElement, HeaderType>(({ handleOpenSidebar, isSidebarOpen }, ref) => {
+export const Header = forwardRef<HTMLDivElement, HeaderType>(({ handleOpenSidebar, isSidebarOpen }) => {
     const [value, setValue] = useState<string>('');
     const { state: authContext, dispatch: dispatchAuth } = useContext(AuthContext);
     const { updateParam } = useUrlParams();
