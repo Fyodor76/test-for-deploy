@@ -1,83 +1,84 @@
-import { FC } from "react";
+import { FC, useRef, useState } from "react";
 import { ProductType } from "../../types/ProductTypes";
 import { LazyImage } from "../lazyImage/LazyImage";
 import { baseURL } from "../../const/baseUrl";
 import { Button } from "../../ui/Button/Button";
 import StarIcon from '@mui/icons-material/Star';
 import { useModal } from "../../hooks/Modal/useModal";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Modal } from "../Modal/Modal";
 import { CommentsModal } from "../commentsModal/CommentsModal";
+import { useCart } from "../../context/CartContext";
 
-export const Product: FC<{ product: ProductType }> = ({product}) => {
-    const {openModal, closeModal, modalState} = useModal();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // const addProduct = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    //   const cart = document.querySelector(".header__icon");
-    
-    //   const productBlock = (e.target as HTMLElement).closest(".product") as HTMLElement; // блок товара, на который кликнули
-    
-    //   if (!productBlock) {
-    //     return; // Если productBlock не найден, просто выходим из функции
-    //   }
-    
-    //   const productCoordinates = productBlock.getBoundingClientRect(); // координаты блока товара
-    //   console.log(productCoordinates, 'prCoord');
-    //   const cartCoordinates = cart?.getBoundingClientRect(); // координаты корзины
-    
-    //   const clonedProduct = productBlock.cloneNode(true) as HTMLElement; // копия блока товара
-    //   clonedProduct.style.position = "absolute";
-    //   clonedProduct.style.left = productCoordinates.left - 100 + "px";
-    //   clonedProduct.style.top = productCoordinates.top - 100 + "px";
-    //   clonedProduct.style.opacity = "0.5";
-    //   clonedProduct.style.transition = "all 1s ease-in-out";
-    
-    //   document.body.appendChild(clonedProduct); // добавляем копию на страницу
-    
-    //   // Анимация перемещения товара к корзине
-    //   setTimeout(() => {
-    //     if (cartCoordinates) {
-    //       clonedProduct.style.left = cartCoordinates.left + "px";
-    //       clonedProduct.style.top = cartCoordinates.top + "px";
-    //     }
-    //   }, 100);
-    
-    //   // Удаление копии товара после завершения анимации
-    //   setTimeout(() => {
-    //     document.body.removeChild(clonedProduct);
-    //   }, 2000);
-    // };
-    
+export const Product: FC<{ product: ProductType }> = ({ product }) => {
+  const { openModal, closeModal, modalState } = useModal();
+  const { basketRef } = useCart();
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [startPosition, setStartPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [endPosition, setEndPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const imageRef = useRef<HTMLImageElement>(null);
 
-    return (
-        <div className="product">
-           <LazyImage src={`${baseURL}${product.imageUrl}`} alt=""/>
-           <div className="price">
-                <span>
-                    {product.price} Р
-                </span>
-           </div>
-           <div className="name">{product.name}</div>
-           <div className="feedbacks">
-                <div className="rate">
-                    <div className="icon-star"><StarIcon color="warning"/></div>
-                    <span>{product.rate}</span>
-                </div>
-                <div className="comments-number" onClick={() => openModal(<CommentsModal productId={product.id} closeModal={closeModal}/>)}>
-                    <span>{getCommentLabel(product.commentsNumber)}</span>
-                </div>
-           </div>
-           <Button size='medium' color='basic' background='base'>       
-                <span>В корзину</span>
-            </Button>
-        <AnimatePresence initial={false}>
-            {modalState.isOpen && <Modal closeModal={closeModal} template={modalState.template} show={modalState.isOpen}/>}
-       </AnimatePresence>
+  const handleAddToCart = () => {
+    if (imageRef.current && basketRef.current) {
+      const imageRect = imageRef.current.getBoundingClientRect();
+      const basketRect = basketRef.current.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+      setStartPosition({ x: imageRect.left + scrollLeft, y: imageRect.top + scrollTop });
+      setEndPosition({ x: basketRect.left + scrollLeft, y: basketRect.top + scrollTop });
+      setIsAnimating(false); // Сбросить состояние анимации
+      setTimeout(() => setIsAnimating(true), 10); // Перезапустить анимацию с новыми координатами
+    }
+  };
+
+  return (
+    <div className="product">
+      <LazyImage src={`${baseURL}${product.imageUrl}`} alt="" ref={imageRef} />
+      <div className="price">
+        <span>{product.price} Р</span>
+      </div>
+      <div className="name">{product.name}</div>
+      <div className="feedbacks">
+        <div className="rate">
+          <div className="icon-star">
+            <StarIcon color="warning" />
+          </div>
+          <span>{product.rate}</span>
         </div>
-    );
+        <div
+          className="comments-number"
+          onClick={() => openModal(<CommentsModal productId={product.id} closeModal={closeModal} />)}
+        >
+          <span>{getCommentLabel(product.commentsNumber)}</span>
+        </div>
+      </div>
+      <Button size="medium" color="basic" background="base" onClick={handleAddToCart}>
+        <span>В корзину</span>
+      </Button>
+      <AnimatePresence initial={false}>
+        {modalState.isOpen && <Modal closeModal={closeModal} template={modalState.template} show={modalState.isOpen} />}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isAnimating && (
+          <motion.div
+            key={Math.random()} // Уникальный ключ для перезапуска анимации
+            className="flying-product"
+            initial={{ opacity: 1, x: startPosition.x, y: startPosition.y }}
+            animate={{ opacity: 1, x: endPosition.x, y: endPosition.y }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }} // Длительность анимации
+            style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
+            onAnimationComplete={() => setIsAnimating(false)} // Скрыть картинку после анимации
+          >
+            <LazyImage src={`${baseURL}${product.imageUrl}`} alt="" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };
-
 
 const getCommentLabel = (number: number) => {
     const lastDigit = number % 10;

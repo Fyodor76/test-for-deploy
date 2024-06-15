@@ -5,7 +5,7 @@ interface Button {
   background: 'primary' | 'secondary' | 'tertiary' | 'transparent' | 'base';
   color: 'accent' | 'basic' | 'bark';
   children?: string | ReactNode;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   disabled?: boolean;
 }
 
@@ -19,7 +19,7 @@ export const Button: FC<Button> = ({
 }) => {
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => onClick && onClick(e)}
       className={`btn btn-${size} btn-${color} btn-${background}`}
       disabled={disabled}
     >

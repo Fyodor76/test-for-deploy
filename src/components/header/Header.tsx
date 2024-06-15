@@ -1,7 +1,7 @@
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import Hamburger from 'hamburger-react';
-import { useState, ChangeEvent, useContext, FC } from 'react';
+import { useState, ChangeEvent, useContext, FC, forwardRef } from 'react';
 import logo from '../../assets/logo.svg';
 import { Sidebar } from '../sidebar/Sidebar.tsx';
 import { Input } from '../../ui/Input/Input.tsx';
@@ -13,6 +13,7 @@ import { AuthService } from '../../api/AuthService.ts';
 import { showToast } from '../../const/toastConfig.ts';
 import debounce from 'lodash/debounce';
 import { useUrlParams } from '../../context/UrlParamContext.tsx';
+import { useCart } from '../../context/CartContext.tsx';
 
 interface HeaderType {
   handleLoading: () => void;
@@ -24,11 +25,12 @@ const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string)
   updateParam(query, value);
 }, 1000);
 
-  export const Header: FC<HeaderType> = ({ handleOpenSidebar, isSidebarOpen}) => {
+export const Header = forwardRef<HTMLDivElement, HeaderType>(({ handleOpenSidebar, isSidebarOpen }, ref) => {
     const [value, setValue] = useState<string>('');
     const { state: authContext, dispatch: dispatchAuth } = useContext(AuthContext);
     const { updateParam } = useUrlParams();
     const navigate = useNavigate();
+    const { basketRef } = useCart();
   
     const logout = async () => {
       await AuthService.logout();
@@ -103,7 +105,7 @@ const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string)
                 </div>
               </div>
             </Link>
-            <div className="header__icon">
+            <div className="header__icon shopping-basket-test" ref={basketRef}>
               <ShoppingBasketIcon />
               <div className="header__icon__text">
                 Корзина
@@ -112,5 +114,6 @@ const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string)
           </div>
         </div>
       </header>
-    );
-  };
+   );
+  }
+);

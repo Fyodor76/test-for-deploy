@@ -6,9 +6,8 @@ import { useUrlParams } from "../../context/UrlParamContext"
 
 export const Main = () => {
     const {state: {products}} = useContext(ProductsContext)
-    const { resetParams, params } = useUrlParams();
+    const { resetParams } = useUrlParams();
 
-    console.log(params, 'params')
     return (
         <div className="main">
             <div className="main-header">

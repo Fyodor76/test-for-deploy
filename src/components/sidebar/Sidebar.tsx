@@ -16,7 +16,6 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
   const { state: {categories, groupProducts} } = useContext(ProductsContext);
   const [showSubtitles, setShowSubtitles] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<string>("");
-  const [scrollOffset, setScrollOffset] = useState<number>(0);
   const { updateParam } = useUrlParams();
 
  // const {dispatch} = useContext(ProductsContext)
@@ -42,25 +41,31 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
   const sidebarStyle = {
     transition: 'left 300ms ease-in-out, top 300ms ease-in-out',
     left: isOpen ? 0 : -253,
-    top: Math.max(91.2 - scrollOffset, 0),
+    top: 92
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setScrollOffset(Math.min(scrollY, 91.2));
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
     if (!isOpen) {
-      setSubitems([])
-      setShowSubtitles(false);
+      setShowSubtitles(false)
     }
   }, [isOpen])
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const scrollY = window.scrollY;
+  //     setScrollOffset(Math.min(scrollY, 91.2));
+  //   };
+
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!isOpen) {
+  //     setSubitems([])
+  //     setShowSubtitles(false);
+  //   }
+  // }, [isOpen])
 
 
   return (

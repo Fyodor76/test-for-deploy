@@ -10,6 +10,33 @@
     flex-direction: column;
     gap: 15px;
 
+    img {
+        border-radius: 12px;
+    }
+
+    .flying-product {
+        position: absolute;
+        pointer-events: none;
+        z-index: 1000;
+        width: 100px;
+        height: 200px;
+        border-radius: 12px;
+
+        img {
+            border-radius: 12px;
+        }
+      }
+    
+
+    img {
+        transition: 500ms; 
+        display: block; 
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.03); 
+           }
+        }
+
     .price {
         font-size: 25px;
         color: rgba(124, 18, 205, 0.9);
@@ -63,3 +90,6 @@
         font-size: 20px;
     }
 }
+
+
+  
