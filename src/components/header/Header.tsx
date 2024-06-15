@@ -1,7 +1,7 @@
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import Hamburger from 'hamburger-react';
-import { useState, ChangeEvent, useContext, FC, useEffect } from 'react';
+import { useState, ChangeEvent, useContext, FC } from 'react';
 import logo from '../../assets/logo.svg';
 import { Sidebar } from '../sidebar/Sidebar.tsx';
 import { Input } from '../../ui/Input/Input.tsx';
