@@ -75,7 +75,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fetchCartItems = async () => {
       try {
         const cartItems = await CartService.fetchCartItems();
-        console.log(cartItems, 'fetch')
         setItems(cartItems);
         showToast("success", "Товары в корзине успешно загружены")
       } catch (error) {
