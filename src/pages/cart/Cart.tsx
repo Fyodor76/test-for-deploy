@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { FiTrash2 } from 'react-icons/fi';
 import { baseURL } from '../../const/baseUrl';
+import { Checkbox } from '../../ui/Checkbox/Checkbox';
 
 export const Cart = () => {
     const { items, removeItem, updateItemQuantity, fetchCartItems } = useCart();
@@ -55,23 +56,23 @@ export const Cart = () => {
         ) : (
           <>
             <div className="cart-header">
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={selectAll}
                 onChange={handleSelectAll}
-                className="select-all-checkbox"
+                size='small'
+                color='base'
               />
               <span>Выбрать все</span>
             </div>
             <ul className="cart-items">
               {items.map((item) => (
                 <li key={item?.id} className="cart-item">
-                  <input
-                    type="checkbox"
+                    <Checkbox  
                     checked={selectedItems.includes(item.id)}
                     onChange={() => handleSelectItem(item.id)}
-                    className="cart-item-checkbox"
-                  />
+                    size='small'
+                    color='base'
+                    />
                   <img src={`${baseURL}${item?.Product?.imageUrl}`} alt={item?.Product?.name} className="cart-item-image" />
                   <div className="cart-item-details">
                     <span className="cart-item-name">{item?.Product?.name}</span>

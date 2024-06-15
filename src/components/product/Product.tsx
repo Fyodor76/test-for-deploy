@@ -9,7 +9,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Modal } from "../Modal/Modal";
 import { CommentsModal } from "../commentsModal/CommentsModal";
 import { useCart } from "../../context/CartContext";
-import { CartService } from "../../api/CartService";
 import { showToast } from "../../const/toastConfig";
 import { AuthContext } from "../../context/AuthContext";
 

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useRef, useState } from 'react';
 import { CartItem } from '../types/CartType';
 import { CartService } from '../api/CartService';
+import { showToast } from '../const/toastConfig';
 
 interface CartProduct {
     id: string;
@@ -35,8 +36,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const newItem = await CartService.addItem(item);
         setItems(prevItems => [...prevItems, newItem]);
+        showToast("success", "Товар успешно добавлен в корзину")
       } catch (error) {
         console.error('Error adding item to cart:', error);
+        showToast("error", "Ошибка при добавлении товара в корзину")
       }
     };
   
@@ -44,8 +47,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         await CartService.removeItem(itemId);
         setItems(prevItems => prevItems.filter(item => item.id !== itemId));
+        showToast("success", "Товар успешно удалён из корзины")
       } catch (error) {
         console.error('Error removing item from cart:', error);
+        showToast("success", "Ошибка при удалении товара из корзины")
       }
     };
   
@@ -72,8 +77,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const cartItems = await CartService.fetchCartItems();
         console.log(cartItems, 'fetch')
         setItems(cartItems);
+        showToast("success", "Товары в корзине успешно загружены")
       } catch (error) {
         console.error('Error fetching cart items:', error);
+        showToast("success", "Ошибка при загрузке товаров в корзине")
       }
     };
   
