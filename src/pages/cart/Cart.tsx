@@ -56,7 +56,7 @@ export const Cart = () => {
     >
       <h2>Корзина</h2>
       {items.length === 0 ? (
-        <p>Ваша корзина пуста</p>
+        <p className='epmty-cart'>Ваша корзина пуста</p>
       ) : (
         <>
           <div className="cart-header">

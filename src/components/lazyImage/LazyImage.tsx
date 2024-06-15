@@ -1,7 +1,7 @@
-import { useState, forwardRef } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import ReactDOM from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Loader } from '../loader/Loader';
-import { AnimatePresence, motion } from 'framer-motion';
 
 interface LazyImageProps {
   src: string;
@@ -41,6 +41,24 @@ export const LazyImage = forwardRef<HTMLImageElement, LazyImageProps>(
     const closeFullscreen = () => {
       setIsFullscreen(false);
     };
+
+    useEffect(() => {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          closeFullscreen();
+        }
+      };
+
+      if (isFullscreen) {
+        window.addEventListener('keydown', handleKeyDown);
+      } else {
+        window.removeEventListener('keydown', handleKeyDown);
+      }
+
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [isFullscreen]);
 
     return (
       <>
