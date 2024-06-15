@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #f4f4f4;
@@ -10,16 +9,17 @@ body {
 }
 
 .epmty-cart {
-    color: white;
+  color: white;
 }
 
 .cart {
   padding: 20px;
-  background: linear-gradient(0deg, rgba(36, 36, 36, .05) 0, rgba(36, 36, 36, .05) 100%), linear-gradient(97deg, #ed3cca .49%, #df34d2 14.88%, #d02bd9 29.27%, #bf22e1 43.14%, #ae1ae8 57.02%, #9a10f0 70.89%, #8306f7 84.76%, #7c1af8 99.15%);;
+  background: linear-gradient(0deg, rgba(36, 36, 36, .05) 0, rgba(36, 36, 36, .05) 100%), linear-gradient(97deg, #ed3cca .49%, #df34d2 14.88%, #d02bd9 29.27%, #bf22e1 43.14%, #ae1ae8 57.02%, #9a10f0 70.89%, #8306f7 84.76%, #7c1af8 99.15%);
   border-radius: 12px;
   max-width: 900px;
   margin: 40px auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  min-height: 300px;
   position: relative;
   overflow: hidden;
 }
@@ -160,11 +160,29 @@ body {
 
 .cart-footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 20px;
+  position: relative;
+  z-index: 1;
 }
 
-.remove-selected-button {
+.empty-cart {
+    color: white;
+}
+
+.cart-total {
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  color: #fff;
+}
+
+.remove-selected-button,
+.order-button {
   background-color: #ff4d4d;
   color: white;
   border: none;
@@ -173,28 +191,11 @@ body {
   border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
-  z-index: 1000;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.remove-selected-button:hover {
-  background-color: #ff1f1f;
-  transform: scale(1.1);
-}
-
-.clear-cart-button {
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  cursor: pointer;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.clear-cart-button:hover {
+.remove-selected-button:hover,
+.order-button:hover {
   background-color: #ff1f1f;
   transform: scale(1.1);
 }
