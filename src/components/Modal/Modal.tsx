@@ -11,10 +11,10 @@ interface ModalType {
 const animationStyles = {
   open: {
     opacity: 1,
-},
-close: {
+  },
+  close: {
     opacity: 0,
-},
+  },
 };
 
 const transition = {
@@ -22,7 +22,6 @@ const transition = {
   ease: [0.45, 0, 0.55, 1],
   duration: 0.25,
 };
-
 
 export const Modal: FC<ModalType> = ({ closeModal, template, show }) => {
   useEffect(() => {
@@ -48,15 +47,18 @@ export const Modal: FC<ModalType> = ({ closeModal, template, show }) => {
   };
 
   return (
-        <motion.div {...effect} className="modal">
-          <div className="modal-wrapper">
-            <div className="modal-content">
-              <button className="modal-close-button" onClick={closeModal}>
-                <RxCross2 />
-              </button>
-              {template}
-            </div>
-          </div>
-        </motion.div>
+    <motion.div {...effect} className="modal">
+      <div className="modal-wrapper">
+        <div className="modal-content">
+          <button className="modal-close-button" onClick={closeModal}>
+            <RxCross2 />
+          </button>
+          {template}
+        </div>
+      </div>
+      <div className="big-close-button" onClick={closeModal}>
+        <RxCross2 />
+      </div>
+    </motion.div>
   );
 };

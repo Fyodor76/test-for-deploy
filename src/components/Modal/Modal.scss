@@ -32,10 +32,27 @@
 .modal-close-button {
   position: absolute;
   right: 8px;
+  top: 8px;
   border: none;
   cursor: pointer;
   font-size: 28px;
   color: #262626;
+}
+
+.big-close-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 50px;
+  color: white;
+  cursor: pointer;
+  z-index: 9999;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.big-close-button:hover {
+  opacity: 0.8;;
+  transform: scale(1.1);
 }
 
 @media (max-width: 1024px) {
