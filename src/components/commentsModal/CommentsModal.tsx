@@ -18,6 +18,7 @@ export const CommentsModal: FC<CommentModalType> = ({ productId, closeModal }) =
   const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
+  const {state: authState} = useContext(AuthContext)
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -91,7 +92,7 @@ export const CommentsModal: FC<CommentModalType> = ({ productId, closeModal }) =
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Add a comment"
           />
-          <button style={{color: "black"}} onClick={handleAddComment}>Submit</button>
+          <button disabled={!authState.isAuth} style={{color: "black"}} onClick={handleAddComment}>Submit</button>
         </div>
       </div>
     </div>
