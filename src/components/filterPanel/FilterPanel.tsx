@@ -13,6 +13,7 @@ type Filters = {
 
 export const FilterPanel: React.FC = () => {
     const { params, updateParam, resetParams } = useUrlParams();
+    const [errors, setErrors] = useState<{ priceFrom?: string; priceTo?: string }>({});
     const [filters, setFilters] = useState({
       priceFrom: params.get('priceFrom') || '',
       priceTo: params.get('priceTo') || '',
@@ -28,14 +29,35 @@ export const FilterPanel: React.FC = () => {
           [name]: type === 'checkbox' ? checked : value,
         }));
       };
+
+      const validateFilters = () => {
+        const newErrors: { priceFrom?: string; priceTo?: string } = {};
+    
+        if (!filters.priceFrom) {
+          newErrors.priceFrom = 'Заполните это поле';
+        }
+        if (!filters.priceTo) {
+          newErrors.priceTo = 'Заполните это поле';
+        }
+        if (filters.priceFrom && filters.priceTo && parseInt(filters.priceFrom, 10) > parseInt(filters.priceTo, 10)) {
+          newErrors.priceFrom = 'Цена от не должна быть больше Цена до';
+        }
+    
+        setErrors(newErrors);
+    
+        return Object.keys(newErrors).length === 0;
+      };
     
       const applyFilters = () => {
-        (Object.keys(filters) as (keyof Filters)[]).forEach((key) => {
-          if (filters[key]) {
-            updateParam(key, filters[key].toString());
-          } 
-        });
+        if (validateFilters()) {
+          const newParams: Record<string, string | boolean> = {};
+          (Object.keys(filters) as (keyof Filters)[]).forEach((key) => {
+            newParams[key] = filters[key];
+          });
+          updateParam(newParams);
+        }
       };
+    
     
       const handleResetFilters = () => {
         setFilters({
@@ -46,7 +68,10 @@ export const FilterPanel: React.FC = () => {
           rating: '',
         });
         resetParams();
+        setErrors({})
       };    
+
+      console.log(errors, 'errors')
   
     return (
       <div className="fixed-filter-panel">
@@ -56,26 +81,30 @@ export const FilterPanel: React.FC = () => {
           </AccordionSummary>
           <AccordionDetails className="filter-details">
             <div className="filter-inputs">
-              <TextField
-                label="Цена от"
-                variant="outlined"
-                value={filters.priceFrom}
-                onChange={handleFilterChange}
-                type="number"
-                name="priceFrom"
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                label="Цена до"
-                variant="outlined"
-                value={filters.priceTo}
-                onChange={handleFilterChange}
-                type="number"
-                name="priceTo"
-                fullWidth
-                margin="dense"
-              />
+            <TextField
+              label="Цена от"
+              variant="outlined"
+              value={filters.priceFrom}
+              onChange={handleFilterChange}
+              type="number"
+              name="priceFrom"
+              fullWidth
+              margin="dense"
+              error={!!errors.priceFrom}
+              helperText={errors.priceFrom}
+            />
+            <TextField
+              label="Цена до"
+              variant="outlined"
+              value={filters.priceTo}
+              onChange={handleFilterChange}
+              type="number"
+              name="priceTo"
+              fullWidth
+              margin="dense"
+              error={!!errors.priceTo}
+              helperText={errors.priceTo}
+            />
               <FormControlLabel
                 control={
                   <Checkbox

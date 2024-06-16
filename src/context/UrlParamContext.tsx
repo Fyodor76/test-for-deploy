@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 
 interface UrlParamsContextType {
   params: URLSearchParams;
-  updateParam: (key: string, value: string) => void;
+  updateParam: (newParams: Record<string, string | boolean>) => void;
   resetParams: () => void;
 }
 
@@ -17,14 +17,18 @@ export const UrlParamsProvider: FC<{ children: ReactNode }> = ({ children }) => 
     setParams(searchParams);
   }, [searchParams]);
 
-  const updateParam = (key: string, value: string) => {
-    const newParams = new URLSearchParams(params);
-    if (value && key) {
-      newParams.set(key, value);
-    } else {
-      newParams.delete(key);
-    }
-    setSearchParams(newParams);
+  const updateParam = (newParams: Record<string, string | boolean>) => {
+    const updatedParams = new URLSearchParams(params);
+    
+    Object.entries(newParams).forEach(([key, value]) => {
+      if (value) {
+        updatedParams.set(key, value.toString());
+      } else {
+        updatedParams.delete(key);
+      }
+    });
+  
+    setSearchParams(updatedParams);
   };
 
   const resetParams = () => {

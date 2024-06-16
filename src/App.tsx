@@ -25,9 +25,6 @@ function App() {
   const handleOpenSidebar = () => {
     setSidebarOpen((prev) => !prev)
   }
-
-  
-
   
   
   return (
