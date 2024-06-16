@@ -5,6 +5,7 @@ import { Main } from '../../pages/main/Main.tsx';
 import { Profile } from '../../pages/profile/Profile.tsx';
 import { ProtectedRoute, PublicRoute } from './ProtectedRoutes.tsx';
 import { Cart } from '../../pages/cart/Cart.tsx';
+import { Orders } from '../../pages/orders/Order.tsx';
 
 const routes = [
   {
@@ -32,6 +33,14 @@ const routes = [
     element: (
       <ProtectedRoute redirectPath="/wb-front/login/">
         <Cart />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/wb-front/orders/',
+    element: (
+      <ProtectedRoute redirectPath="/wb-front/login/">
+        <Orders />
       </ProtectedRoute>
     ),
   },

@@ -89,16 +89,16 @@
     display: flex;
     align-items: center;
   }
+  
+  @media (max-width: 768px) {
+    .block-button {
+      display: flex;
+      justify-content: center;
+    }
+  }
 
   .block-recommendation {
     margin-top: 50px;
-
-    @media (max-width: 768px) {
-      .block-button {
-        display: flex;
-        justify-content: center;
-      }
-    }
   }
 
 

@@ -3,6 +3,7 @@ import { Button } from "../../ui/Button/Button"
 import { ProductsContext } from "../../context/ProductContext"
 import { Product } from "../../components/product/Product"
 import { useUrlParams } from "../../context/UrlParamContext"
+import { FilterPanel } from "../../components/filterPanel/FilterPanel"
 
 export const Main = () => {
     const {state: {products}} = useContext(ProductsContext)
@@ -11,11 +12,8 @@ export const Main = () => {
     return (
         <div className="main">
             <div className="main-header">
-                <div className="title">
-                    <h1>Добро пожаловать на главную страницу Wildberries!</h1>
-                </div>
-                <div className="reset-filters">
-                    <Button size="small" background="base" color="basic" onClick={resetParams}>Сбросить фильтры</Button>
+                <div className="filters-container">
+                    <FilterPanel/>
                 </div>
             </div>
             <div className="container">

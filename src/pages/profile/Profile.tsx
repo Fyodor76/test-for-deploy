@@ -13,6 +13,7 @@ import { Modal } from '../../components/Modal/Modal';
 import { AnimatePresence } from 'framer-motion';
 import { Recommendations } from './components/Recommendations';
 import { Loader } from '../../components/loader/Loader';
+import { useNavigate } from 'react-router-dom';
 
 interface UserProfile {
   firstName: string;
@@ -40,7 +41,8 @@ export const Profile: React.FC = () => {
     });
     const [preview, setPreview] = useState<PreviewType>({ preview: "", closeIcon: false });
     const {openModal, closeModal, modalState} = useModal();
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const handleLoading = () => {
       setIsLoading((prev) => !prev)
@@ -137,18 +139,30 @@ export const Profile: React.FC = () => {
           <h2>Также вы можете выбрать категории и группы товаров, которые хотели бы видеть в рекомендациях</h2>
           <div className='block-button'>
             <Button 
-             size="large"
-             background="base" 
-             color="basic"
-             onClick={() => openModal(<Recommendations closeModal={closeModal} handleLoading={handleLoading}/>)}>
+              size="large"
+              background="base" 
+              color="basic"
+              onClick={() => openModal(<Recommendations closeModal={closeModal} handleLoading={handleLoading}/>)}>
                 Выбрать категории
             </Button>
           </div>
         </div>
-       <AnimatePresence initial={false}>
-        {modalState.isOpen && <Modal closeModal={closeModal} template={modalState.template} show={modalState.isOpen}/>}
-       </AnimatePresence>
-       {isLoading && <Loader/>}
+        <div className="block-orders">
+          <h2>Хотите посмотреть свои заказы?</h2>
+          <div className="block-button">
+            <Button 
+              size="large"
+              background="base" 
+              color="basic"
+              onClick={() => navigate('/wb-front/orders')}>
+                Перейти к заказам
+            </Button>
+          </div>
+        </div>
+        <AnimatePresence initial={false}>
+          {modalState.isOpen && <Modal closeModal={closeModal} template={modalState.template} show={modalState.isOpen}/>}
+        </AnimatePresence>
+        {isLoading && <Loader />}
       </div>
     );
   };

@@ -6,13 +6,15 @@ import { baseURL } from '../../const/baseUrl';
 import { Checkbox } from '../../ui/Checkbox/Checkbox';
 import { Loader } from '../../components/loader/Loader';
 import { toast } from 'react-toastify';
+import tick from '../../assets/tick.jpg'
 import axiosInstance from '../../axios.config';
 
 export const Cart: React.FC = () => {
-    const { items, removeItem, updateItemQuantity, fetchCartItems } = useCart();
+    const { items, removeItem, updateItemQuantity, fetchCartItems , clearCart} = useCart();
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
+    const [isOrderCreated, setOrderCreated] = useState<boolean>(false)
   
     useEffect(() => {
       (async () => {
@@ -64,13 +66,23 @@ export const Cart: React.FC = () => {
     const handleOrder = async () => {
       try {
         await axiosInstance.post('/api/order/create');
-  
+        setOrderCreated(true)
+        await clearCart()
         toast.success('Order created successfully');
       } catch (error) {
         toast.error('Failed to create order');
       }
     };
-  
+
+    if (isOrderCreated) {
+      return (
+        <div className="order-success">
+          <h2>Ваш заказ успешно оформлен!</h2>
+          <p>Спасибо за покупку! Мы свяжемся с вами для подтверждения заказа.</p>
+          <img src={tick} alt="Order Success" />
+        </div>
+      );
+    }
     return (
       !loading ? (
         <motion.div className="cart">

@@ -19,7 +19,7 @@ export const UrlParamsProvider: FC<{ children: ReactNode }> = ({ children }) => 
 
   const updateParam = (key: string, value: string) => {
     const newParams = new URLSearchParams(params);
-    if (value) {
+    if (value && key) {
       newParams.set(key, value);
     } else {
       newParams.delete(key);

@@ -65,7 +65,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
     const clearCart = async () => {
       try {
-        await CartService.clearCart();
+       // await CartService.clearCart();
         setItems([]);
       } catch (error) {
         console.error('Error clearing cart:', error);
