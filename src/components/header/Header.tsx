@@ -21,8 +21,8 @@ interface HeaderType {
   isSidebarOpen: boolean;
 }
 
-const debouncedUpdateUrl = debounce((updateParam: (query: string, value: string) => void, query: string, value: string) => {
-  updateParam(query, value);
+const debouncedUpdateUrl = debounce((updateParams: (newParams: Record<string, string | boolean>) => void, query: string, value: string) => {
+  updateParams({ [query]: value });
 }, 1000);
 
 export const Header = forwardRef<HTMLDivElement, HeaderType>(({ handleOpenSidebar, isSidebarOpen }) => {
@@ -47,7 +47,7 @@ export const Header = forwardRef<HTMLDivElement, HeaderType>(({ handleOpenSideba
   
     const clearInput = () => {
       setValue('');
-      updateParam('query', '');
+      updateParam({'query': ''});
     };
 
     return (

@@ -27,7 +27,7 @@ export const Sidebar: FC<SidebarType> = ({ isOpen }) => {
 
 
   const handleGroupParams = (id: string) => {
-    updateParam('group', id)
+    updateParam({'group': id})
   }
 
 
