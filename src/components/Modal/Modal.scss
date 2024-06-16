@@ -63,5 +63,7 @@
 @media (max-width: 768px) {
   .modal-content {
     min-width: 90%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 }
