@@ -8,7 +8,7 @@ type Filters = {
     priceTo: string;
     recommended: boolean;
     popular: boolean;
-    rating: string;
+    rate: string;
   };
 
 export const FilterPanel: React.FC = () => {
@@ -19,7 +19,7 @@ export const FilterPanel: React.FC = () => {
       priceTo: params.get('priceTo') || '',
       recommended: params.get('recommended') === 'true',
       popular: params.get('popular') === 'true',
-      rating: params.get('rating') || '',
+      rate: params.get('rate') || '',
     });
   
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,23 +32,24 @@ export const FilterPanel: React.FC = () => {
 
       const validateFilters = () => {
         const newErrors: { priceFrom?: string; priceTo?: string } = {};
-    
-        if (!filters.priceFrom) {
-          newErrors.priceFrom = 'Заполните это поле';
-        }
-        if (!filters.priceTo) {
+      
+        if (filters.priceFrom && !filters.priceTo) {
           newErrors.priceTo = 'Заполните это поле';
+        }
+        if (filters.priceTo && !filters.priceFrom) {
+          newErrors.priceFrom = 'Заполните это поле';
         }
         if (filters.priceFrom && filters.priceTo && parseInt(filters.priceFrom, 10) > parseInt(filters.priceTo, 10)) {
           newErrors.priceFrom = 'Цена от не должна быть больше Цена до';
         }
-    
+      
         setErrors(newErrors);
-    
+      
         return Object.keys(newErrors).length === 0;
       };
     
       const applyFilters = () => {
+        console.log(filters, 'filters')
         if (validateFilters()) {
           const newParams: Record<string, string | boolean> = {};
           (Object.keys(filters) as (keyof Filters)[]).forEach((key) => {
@@ -65,14 +66,12 @@ export const FilterPanel: React.FC = () => {
           priceTo: '',
           recommended: false,
           popular: false,
-          rating: '',
+          rate: '',
         });
         resetParams();
         setErrors({})
       };    
 
-      console.log(errors, 'errors')
-  
     return (
       <div className="fixed-filter-panel">
         <Accordion className="filter-panel">
@@ -128,12 +127,12 @@ export const FilterPanel: React.FC = () => {
               <TextField
                 label="Оценка товара"
                 variant="outlined"
-                value={filters.rating}
+                value={filters.rate}
                 onChange={handleFilterChange}
                 type="number"
                 inputProps={{ min: 1, max: 5 }}
-                name="rating"
-                fullWidth
+                name="rate"
+                style={{width: '300px'}}
                 margin="dense"
               />
               <div className="filter-buttons">

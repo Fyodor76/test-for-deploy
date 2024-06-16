@@ -73,25 +73,51 @@ import { useUrlParams } from './UrlParamContext';
     useEffect(() => {
       const query = params.get('query') || "";
       const group = params.get('group') || "";
-  
+      const priceFrom = params.get('priceFrom') || "";
+      const priceTo = params.get('priceTo') || "";
+      const recommended = params.get('recommended') === 'true';
+      const popular = params.get('popular') === 'true';
+      const rate = params.get('rate') || "";
+    
       const fetchProducts = async () => {
         try {
+          const searchParams: Record<string, string | boolean | undefined> = {
+            query,
+            group,
+            priceFrom,
+            priceTo,
+            recommended,
+            popular,
+            rate
+          };
+
+          console.log(rate, 'rate')
+
+      
+    
+          // Удаляем параметры, которые пустые
+          Object.keys(searchParams).forEach(key => {
+            if (!searchParams[key]) {
+              delete searchParams[key];
+            }
+          });
+    
           if (!params.size) {
             const results = await Products.fetchProducts();
             dispatch({ type: 'SET_PRODUCTS', payload: results });
           } else {
-            const results = await Products.searchProducts({ query, group });
+            const results = await Products.searchProducts(searchParams);
             dispatch({ type: 'SET_PRODUCTS', payload: results });
           }
           
           showToast("success", "Товары успешно найдены!")
         } catch (error) {
           console.error('Error fetching search results:', error);
-          showToast("success", "Возникла ошибка при получении товаров!")
+          showToast("error", "Возникла ошибка при получении товаров!")
         }
       };
-  
-        fetchProducts();
+    
+      fetchProducts();
     }, [params]);
   
     return (
