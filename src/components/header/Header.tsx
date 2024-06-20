@@ -67,7 +67,7 @@ export const Header = forwardRef<HTMLDivElement, HeaderType>(({ handleOpenSideba
           </div>
           <div className="header__input__container">
             <Input
-              placeholder="Найти на Wildberries"
+              placeholder="Найти на Everyday"
               value={value}
               name="value"
               onChange={onChange}
