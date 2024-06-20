@@ -49,7 +49,6 @@ export const FilterPanel: React.FC = () => {
       };
     
       const applyFilters = () => {
-        console.log(filters, 'filters')
         if (validateFilters()) {
           const newParams: Record<string, string | boolean> = {};
           (Object.keys(filters) as (keyof Filters)[]).forEach((key) => {
